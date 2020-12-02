@@ -13,7 +13,7 @@ def prettier(srcs, config = None):
         install_source_map_support = False,
         templated_args = [
             "--check",
-            "--config $(rootpath " + config +")",
+            "--config $(rootpath " + config + ")",
         ] + [
             "$(rootpath " + src + ")"
             for src in srcs

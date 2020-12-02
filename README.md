@@ -137,3 +137,8 @@ started.
 To ensure a safe experience and a welcoming community, the project adheres to the [contributor
 convenant](https://www.contributor-covenant.org/) [code of
 conduct](/code_of_conduct.md).
+
+
+## Airy Open Source
+
+At Airy we ❤️ Open Source. Check out our other projects over at [docs.airy.co](https://docs.airy.co).

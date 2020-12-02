@@ -13,7 +13,7 @@ def checkstyle(srcs, config = None):
         use_testrunner = False,
         main_class = "com.puppycrawl.tools.checkstyle.Main",
         data = [
-            config
+            config,
         ] + srcs,
         runtime_deps = [
             "@maven//:com_puppycrawl_tools_checkstyle",

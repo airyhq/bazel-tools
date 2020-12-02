@@ -1,0 +1,21 @@
+# Make compilation fast, by keeping a few copies of the compilers
+# running as daemons, and cache SourceFile AST's to reduce parse time.
+build --strategy=TypeScriptCompile=worker
+
+# Use java 11
+build --java_toolchain=@bazel_tools//tools/jdk:toolchain_java11 --host_java_toolchain=@bazel_tools//tools/jdk:toolchain_java11
+
+# Output test errors by default
+test --test_output=errors
+# Do not build production artifacts to speed up tests
+# Build outputs should be validated by running build
+test --build_tests_only
+
+
+# CI configuration
+# ----------------
+common:ci --color=no
+
+build:ci --noshow_progress
+build:ci --verbose_failures
+build:ci --disk_cache=~/.cache/bazel
