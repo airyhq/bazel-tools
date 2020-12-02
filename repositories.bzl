@@ -38,11 +38,28 @@ def airy_bazel_tools_dependencies():
         ],
     )
 
+    _maybe_add(
+        http_archive,
+        name = "io_bazel_rules_go",
+        sha256 = "a8d6b1b354d371a646d2f7927319974e0f9e52f73a2452d2b3877118169eb6bb",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.23.3/rules_go-v0.23.3.tar.gz",
+            "https://github.com/bazelbuild/rules_go/releases/download/v0.23.3/rules_go-v0.23.3.tar.gz",
+        ],
+    )
+
+    _maybe_add(
+        git_repository,
+        name = "com_google_protobuf",
+        commit = "09745575a923640154bcf307fba8aedff47f240a",
+        remote = "https://github.com/protocolbuffers/protobuf",
+        shallow_since = "1558721209 -0700",
+    )
+
 def _maybe_add(repo_rule, name, **kwargs):
     if name not in native.existing_rules():
         repo_rule(name = name, **kwargs)
 
-
 airy_jvm_deps = [
-    "com.puppycrawl.tools:checkstyle:8.37"
+    "com.puppycrawl.tools:checkstyle:8.37",
 ]

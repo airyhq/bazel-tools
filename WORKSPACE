@@ -7,7 +7,18 @@ load("//:repositories.bzl", "airy_bazel_tools_dependencies", "airy_jvm_deps")
 
 airy_bazel_tools_dependencies()
 
+# Golang
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 
+go_rules_dependencies()
+
+go_register_toolchains()
+
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+
+protobuf_deps()
+
+# Java
 load("@rules_jvm_external//:defs.bzl", "maven_install")
 
 maven_install(
@@ -22,6 +33,7 @@ load("@maven//:defs.bzl", "pinned_maven_install")
 
 pinned_maven_install()
 
+# Javascript
 load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
 
 node_repositories()

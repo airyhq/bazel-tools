@@ -1,3 +1,21 @@
-.idea
-.ijwb
-/bazel-*
+# Editors and IDE's
+.idea/
+.code/
+.vscode/
+.ijwb/
+
+# Bazel
+!.ijwb/.bazelproject
+dist/
+bazel-*
+
+# Emacs backup files
+.\#*
+
+# Node packages
+node_modules/
+yarn-error.log
+package-lock.json
+
+# Misc
+.DS_Store
