@@ -141,4 +141,4 @@ conduct](/code_of_conduct.md).
 
 ## Airy Open Source
 
-We at Airy ❤️ Open Source. Check out our other projects over at [docs.airy.co](https://docs.airy.co).
+At Airy we ❤️ Open Source. Check out our other projects over at [docs.airy.co](https://docs.airy.co).
