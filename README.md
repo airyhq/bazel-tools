@@ -6,7 +6,7 @@ Bazel tooling used by all Airy Bazel workspaces.
 
 To install, add this snippet to your `WORKSPACE`:
 
-```
+```python
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 git_repository(
     name = "com_github_airyhq_bazel_tools",
@@ -22,7 +22,7 @@ load("@rules_jvm_external//:defs.bzl", "maven_install")
 
 maven_install(
     artifacts = YOUR_JVM_ARTIFACTS_LIST + airy_jvm_deps,
-    ...
+    # ...
 )
 ```
 
@@ -114,15 +114,117 @@ To try fixing buildifier lint issues you can run:
 bazel run @com_github_airyhq_bazel_tools//code-format:fix_buildifier
 ```
 
-These two rules are a very shallow wrapper of buildifier, but we package it for convenvience. If you are looking
+These two rules are a very shallow wrapper of buildifier, but we package them for convenience. If you are looking
 to use its extensive API you can replace this implementation with your own.
+
+## Web builds
+
+For web builds we use the [rules_nodejs](https://github.com/bazelbuild/rules_nodejs) repository. You have to install the 
+following npm packages with `rules_nodejs` to use the web rules:
+
+```
+yarn add -D path minimist webpack webpack-dev-middleware express connect-history-fallback html-webpack-plugin \
+copy-webpack-plugin terser-webpack-plugin @babel/core @babel/preset-env @bazel/ibazel @bazel/typescript \
+@svgr/webpack ejs-compiled-loader node-sass react-hot-loader style-loader
+``` 
+
+### `ts_library`
+
+This is a thin wrapper around the `ts_library` provided by `rules_nodejs`. It also aggregates asset dependencies so
+that they are available to downstream bundling. 
+
+```python
+load("@com_github_airyhq_bazel_tools//web:typescript.bzl", "ts_library")
+
+ts_library(
+    name = "mylib",
+    srcs = ["index.ts"],
+    deps = [
+        "//my/web/library:ts_lib",
+        "@npm//react",
+        "@npm//@types/react",
+    ],
+    data = ["assets/logo.svg"]
+)
+```
+
+**Parameters:**
+
+- `name`    Unique name of the rule. Will also be used as the js module name so that you can import it like so
+            `import {someFunction} from 'mylib'`.
+- `srcs`    (optional) Your components source files. By default we glob all `.ts` and `.tsx` files.
+- `deps`    (optional) Node module dependencies required to compile the library.
+- `data`    (optional) Files needed as imports to your typescript files. By default we glob typical web file extensions.
+- `tsconfig`    (optional) It's possible to extend tsconfigs. Give it a try, if
+            it fits your use case (https://www.npmjs.com/package/@bazel/typescript#ts_config)
+
+### `web_app`
+
+Bundles your web resources using `webpack`. Adds an additional target `bundle_server` that you can use for 
+running a webpack server with hot code reloading. For this to work you need to install [ibazel](https://github.com/bazelbuild/bazel-watcher):
+
+```shell script
+ibazel run //my/web/package:bundle_server
+```
+
+```python
+load("@com_github_airyhq_bazel_tools//web:web_app.bzl", "web_app")
+
+web_app(
+    name = "bundle",
+    app_lib = ":app",
+    static_assets = "//my/web/package/public",
+    entry = "my/web/package/src/index.js",
+    index = ":index.html",
+    dev_index = ":dev_index.html",
+    module_deps = module_deps,
+    webpack_prod_config = ":webpack.prod.config.js",
+    webpack_dev_config = ":webpack.dev.config.js",
+)
+```
+
+**Parameters:**
+
+- `name`    Unique name of the build rule. The dev server rule will be called `name_server`
+- `app_lib` Label of the app `ts_library`
+- `static_assets`   (optional) Filegroup (list of files) that should be copied "as is" to the webroot.
+                  Files need to be in a folder called 'public'.
+- `entry`   Relative path to your compiled index.js
+- `index`   index.html file used for the build
+- `dev_index`   (optional) index.html file used for the devserver (defaults to `index`)
+- `module_deps` (optional) app_lib dependencies on `ts_library` targets
+
+
+### `web_library`
+load("@com_github_airyhq_bazel_tools//web:web_library.bzl", "web_library")
+
+```python
+web_library(
+    name = "bundle",
+    app_lib = ":app",
+    entry = "my/web/package/src/index.js",
+    module_deps = module_deps,
+    output = {
+        "publicPath": "/blog/"
+    }
+)
+```
+
+**Parameters:**
+
+- `name`    Unique name of the build rule.
+- `app_lib` Label of the app `ts_library`
+- `entry`   Relative path to your compiled index.js
+- `output`  Dictionary that gets applied to the webpack output https://webpack.js.org/configuration/output/
+- `externals`   (optional) Dependencies that should not be bundled, see https://webpack.js.org/guides/author-libraries/#externalize-lodash
+- `module_deps` (optional) app_lib dependencies on `ts_library` targets
 
 ## How to contribute
 
 We welcome (and love) every form of contribution! Good entry points to the
 project are:
 
-- Our [contributing guidelines](TODO)
+- Our [contributing guidelines](CONTRIBUTING.md)
 - Issues with the tag
   [gardening](https://github.com/airyhq/bazel-tools/issues?q=is%3Aissue+is%3Aopen+label%3Agardening)
 - Issues with the tag [good first

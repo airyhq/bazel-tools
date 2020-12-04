@@ -2,10 +2,32 @@
   "name": "@airyhq/bazel-tools",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-  },
+  "dependencies": {},
   "scripts": {},
   "devDependencies": {
-    "prettier": "^1.19.1"
+    "@babel/core": "^7.12.9",
+    "@babel/preset-env": "^7.12.7",
+    "@bazel/ibazel": "^0.14.0",
+    "@bazel/typescript": "1.6.0",
+    "@svgr/webpack": "^5.5.0",
+    "connect-history-api-fallback": "^1.6.0",
+    "copy-webpack-plugin": "^6.3.2",
+    "css-loader": "^5.0.1",
+    "ejs-compiled-loader": "^3.0.0",
+    "express": "^4.17.1",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^4.5.0",
+    "minimist": "^1.2.5",
+    "node-sass": "^5.0.0",
+    "path": "^0.12.7",
+    "prettier": "^1.19.1",
+    "react-hot-loader": "^4.13.0",
+    "style-loader": "^2.0.0",
+    "terser-webpack-plugin": "^5.0.3",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.9.0",
+    "webpack-bundle-analyzer": "^4.2.0",
+    "webpack-dev-middleware": "^4.0.2",
+    "webpack-hot-middleware": "^2.25.0"
   }
 }
