@@ -123,8 +123,8 @@ For web builds we use the [rules_nodejs](https://github.com/bazelbuild/rules_nod
 following npm packages with `rules_nodejs` to use the web rules:
 
 ```
-yarn add -D path minimist webpack webpack-dev-middleware express connect-history-fallback html-webpack-plugin \
-copy-webpack-plugin terser-webpack-plugin @babel/core @babel/preset-env @bazel/ibazel @bazel/typescript \
+yarn add -D path minimist webpack@4.43.0 webpack-dev-middleware express connect-history-api-fallback html-webpack-plugin \
+copy-webpack-plugin@6.3.2 terser-webpack-plugin@5.0.3 @babel/core @babel/preset-env @bazel/ibazel @bazel/typescript@1.6.0 \
 @svgr/webpack ejs-compiled-loader node-sass react-hot-loader style-loader
 ``` 
 
