@@ -196,9 +196,10 @@ web_app(
 
 
 ### `web_library`
-load("@com_github_airyhq_bazel_tools//web:web_library.bzl", "web_library")
 
 ```python
+load("@com_github_airyhq_bazel_tools//web:web_library.bzl", "web_library")
+
 web_library(
     name = "bundle",
     app_lib = ":app",
@@ -218,6 +219,55 @@ web_library(
 - `output`  Dictionary that gets applied to the webpack output https://webpack.js.org/configuration/output/
 - `externals`   (optional) Dependencies that should not be bundled, see https://webpack.js.org/guides/author-libraries/#externalize-lodash
 - `module_deps` (optional) app_lib dependencies on `ts_library` targets
+
+## Java
+
+### `avro_java_library`
+
+This rule takes Avro schema definition files `.avsc` and compiles them to a Jar using the [Avro tools](https://avro.apache.org/docs/current/gettingstartedjava.html) 
+
+```python
+load("@com_github_airyhq_bazel_tools//java:avro.bzl", "avro_java_library")
+
+avro_java_library(
+    name = "user", 
+    srcs = ["user.avsc"]
+)
+
+# Example Usage
+java_library(
+    name = "mylib",
+    deps = [":user"],
+)
+```
+
+**Parameters:**
+
+- `name`    Unique name of the generated java library.  
+- `srcs`    Avro definition files to compile. If you leave this empty it will default to `["{name}.avsc"]`.
+
+
+### `junit5`
+
+This is an opinionated wrapper around the Bazel built-in [`java_test`](https://docs.bazel.build/versions/master/be/java.html#java_test).
+It requires that the test path starts with `src/java/test` and that the test package name is the same as the file path.
+I.e. a test file in package `com.package` needs to be located in `src/test/java/com/package/`.
+
+```python
+load("@com_github_airyhq_bazel_tools//java:junit5.bzl", "junit5")
+
+junit5(
+    file = "src/java/test/com/package/Test.java", 
+    size = "small",
+)
+```
+
+**Parameters:**
+
+- `file`    Relative file path of the test file 
+
+For more options see the Bazel `java_test` [rule](https://docs.bazel.build/versions/master/be/java.html#java_test) 
+
 
 ## How to contribute
 

@@ -22,6 +22,7 @@ def airy_bazel_tools_dependencies():
 
     _maybe_add(
         http_archive,
+        # Don't fix this dependency as the content on the provided URL changes
         name = "com_github_bazelbuild_buildtools",
         strip_prefix = "buildtools-master",
         url = "https://github.com/bazelbuild/buildtools/archive/master.zip",
@@ -61,4 +62,5 @@ def _maybe_add(repo_rule, name, **kwargs):
 
 airy_jvm_deps = [
     "com.puppycrawl.tools:checkstyle:8.37",
+    "org.junit.platform:junit-platform-console:1.7.0",
 ]
