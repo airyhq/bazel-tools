@@ -47,6 +47,7 @@ load("@com_github_airyhq_bazel_tools//code-format:prettier.bzl", "prettier")
 prettier(
     srcs = ["index.js"],
     config = "//:.prettierrc.json" # Defaults to code-format/.prettierrc.json
+    ignore = "//:.prettierignore" # Defaults to code-format/.prettierignore
 )
 ```
 

@@ -4,6 +4,7 @@ load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
 package(default_visibility = ["//visibility:public"])
 
 exports_files([
+    ".prettierignore",
     ".prettierrc.json",
     "checkstyle.xml",
 ])

@@ -1,7 +1,8 @@
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_test")
 
-def prettier(srcs, config = None):
+def prettier(srcs, config = None, ignore = None):
     config = config if config else "@com_github_airyhq_bazel_tools//code-format:.prettierrc.json"
+    ignore = ignore if ignore else "@com_github_airyhq_bazel_tools//code-format:.prettierignore"
 
     nodejs_test(
         name = "prettier",
@@ -14,6 +15,7 @@ def prettier(srcs, config = None):
         templated_args = [
             "--check",
             "--config $(rootpath " + config + ")",
+            "--ignore-path $(rootpath " + ignore + ")",
         ] + [
             "$(rootpath " + src + ")"
             for src in srcs
