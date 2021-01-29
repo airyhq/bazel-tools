@@ -8,6 +8,7 @@ def prettier(srcs, config = None, ignore = None):
         name = "prettier",
         data = [
             config,
+            ignore,
             "@npm//prettier",
         ] + srcs,
         entry_point = "@npm//:node_modules/prettier/bin-prettier.js",
