@@ -29,7 +29,9 @@ def web_library(
         app_lib,
         entry,
         output,
+        aliases = {},
         externals = {},
+        show_bundle_report = False,
         module_deps = []):
     ts_transpiled_sources = name + "_ts_transpiled"
 
@@ -53,12 +55,17 @@ def web_library(
         "--tsconfig",
         "$(location " + ts_config + ")",
         "--outputDict",
-        encode_dict(output),
+        json.encode(output),
         "--externalDict",
-        encode_dict(externals),
+        json.encode(externals),
         "--path",
         "$(@D)",
+        "--aliases",
+        json.encode(aliases),
     ]
+
+    if show_bundle_report == True:
+        args.append("--show_bundle_report")
 
     webpack(
         name = name,
@@ -72,9 +79,3 @@ def web_library(
                ] +
                ts_srcs_assets,
     )
-
-def encode_dict(output):
-    return "|".join([
-        setting[0] + "=" + setting[1]
-        for setting in output.items()
-    ])

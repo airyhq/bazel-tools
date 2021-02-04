@@ -29,7 +29,7 @@ tsconfig -  (optional) It's possible to extend tsconfigs! Give it a try, if
 
 ASSETS_SUFFIX = "_assets"
 
-def ts_library(name, srcs = None, deps = None, data = None, tsconfig = None):
+def ts_library(name, srcs = None, deps = None, data = None, tsconfig = None, lint_rule = check_pkg):
     tsconfig = "//:tsconfig.json" if not tsconfig else tsconfig
     deps = [] if not deps else deps
     srcs = native.glob(["**/*.tsx", "**/*.ts"]) if not srcs else srcs
@@ -43,7 +43,8 @@ def ts_library(name, srcs = None, deps = None, data = None, tsconfig = None):
         "**/*.json",
     ])
 
-    check_pkg()
+    if lint_rule != None:
+        lint_rule()
 
     data = default_data_glob if not data else data
 
