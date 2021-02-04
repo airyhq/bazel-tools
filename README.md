@@ -158,6 +158,8 @@ ts_library(
 - `data`    (optional) Files needed as imports to your typescript files. By default we glob typical web file extensions.
 - `tsconfig`    (optional) It's possible to extend tsconfigs. Give it a try, if
             it fits your use case (https://www.npmjs.com/package/@bazel/typescript#ts_config)
+- `lint_rule`    (optional) by default this is set to [check_pkg()](#prettier). Setting this flag to None, will
+disable linting for this package.
 
 ### `web_app`
 

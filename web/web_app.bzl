@@ -25,6 +25,7 @@ static_assets   - (optional) Filegroup (list of files) that should be copied "as
                   Files need to be in a folder called 'public' so that we can implicitly infer their purpose
 entry           - Relative path to your compiled index.js
 index           - index.html file used for the build
+aliases         - (optional) Modules to alias https://webpack.js.org/guides/author-libraries/#externalize-lodash
 dev_index       - (optional) index.html file used for the devserver (defaults to bundle index)
 module_deps     - (optional) app_lib dependencies on our own typescript libraries (TODO infer this)
 
@@ -38,9 +39,11 @@ def web_app(
         index,
         static_assets = None,
         module_deps = [],
+        aliases = {},
         dev_index = None,
         webpack_prod_config = None,
-        webpack_dev_config = None):
+        webpack_dev_config = None,
+        show_bundle_report = False):
     static_assets = [static_assets] if static_assets else []
     ts_transpiled_sources = name + "_ts_transpiled"
 
@@ -58,20 +61,27 @@ def web_app(
 
     ts_config = app_lib + "_tsconfig.json"
 
+    build_args = [
+        "$(GENDIR)/" + entry,
+        "--config",
+        "$(execpath " + webpack_prod_config + ")",
+        "--tsconfig",
+        "$(location " + ts_config + ")",
+        "--index",
+        "$(location " + index + ")",
+        "--path",
+        "$(@D)",
+        "--aliases",
+        json.encode(aliases),
+    ]
+
+    if show_bundle_report == True:
+        build_args.append("--show_bundle_report")
+
     webpack(
         name = name,
         output_dir = True,
-        args = [
-            "$(GENDIR)/" + entry,
-            "--config",
-            "$(execpath " + webpack_prod_config + ")",
-            "--tsconfig",
-            "$(location " + ts_config + ")",
-            "--index",
-            "$(location " + index + ")",
-            "--path",
-            "$(@D)",
-        ],
+        args = build_args,
         data = [
             ts_transpiled_sources,
             webpack_prod_config,

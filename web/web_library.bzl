@@ -53,9 +53,9 @@ def web_library(
         "--tsconfig",
         "$(location " + ts_config + ")",
         "--outputDict",
-        encode_dict(output),
+        json.encode(output),
         "--externalDict",
-        encode_dict(externals),
+        json.encode(externals),
         "--path",
         "$(@D)",
     ]
@@ -72,9 +72,3 @@ def web_library(
                ] +
                ts_srcs_assets,
     )
-
-def encode_dict(output):
-    return "|".join([
-        setting[0] + "=" + setting[1]
-        for setting in output.items()
-    ])
