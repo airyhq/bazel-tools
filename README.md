@@ -126,7 +126,7 @@ following npm packages with `rules_nodejs` to use the web rules:
 ```
 yarn add -D path minimist webpack@4.43.0 webpack-dev-middleware express connect-history-api-fallback html-webpack-plugin \
 copy-webpack-plugin@6.3.2 terser-webpack-plugin@5.0.3 @babel/core @babel/preset-env @bazel/ibazel @bazel/typescript@1.6.0 \
-@svgr/webpack ejs-compiled-loader node-sass react-hot-loader style-loader
+@svgr/webpack ejs-compiled-loader node-sass react-hot-loader style-loader webpack-bundle-analyzer
 ``` 
 
 ### `ts_library`
@@ -194,6 +194,8 @@ web_app(
                   Files need to be in a folder called 'public'.
 - `entry`   Relative path to your compiled index.js
 - `index`   index.html file used for the build
+- `aliases` (optional) applied to webpack [alias](https://webpack.js.org/configuration/resolve/#resolvealias)
+- `show_bundle_report`  If set to true generates a static bundle size report
 - `dev_index`   (optional) index.html file used for the devserver (defaults to `index`)
 - `module_deps` (optional) app_lib dependencies on `ts_library` targets
 
@@ -206,7 +208,7 @@ load("@com_github_airyhq_bazel_tools//web:web_library.bzl", "web_library")
 web_library(
     name = "bundle",
     app_lib = ":app",
-    entry = "my/web/package/src/index.js",
+entry = "my/web/package/src/index.js",
     module_deps = module_deps,
     output = {
         "publicPath": "/blog/"
@@ -220,6 +222,8 @@ web_library(
 - `app_lib` Label of the app `ts_library`
 - `entry`   Relative path to your compiled index.js
 - `output`  Dictionary that gets applied to the webpack output https://webpack.js.org/configuration/output/
+- `aliases` (optional) applied to webpack [alias](https://webpack.js.org/configuration/resolve/#resolvealias)
+- `show_bundle_report`  If set to true generates a static bundle size report
 - `externals`   (optional) Dependencies that should not be bundled, see https://webpack.js.org/guides/author-libraries/#externalize-lodash
 - `module_deps` (optional) app_lib dependencies on `ts_library` targets
 
