@@ -119,7 +119,6 @@ def web_app(
         ],
     )
 
-
 def encode_dict(output):
     return "|".join([
         setting[0] + "=" + setting[1]

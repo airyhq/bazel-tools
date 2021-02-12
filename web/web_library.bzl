@@ -80,7 +80,6 @@ def web_library(
                ts_srcs_assets,
     )
 
-
 def encode_dict(output):
     return "|".join([
         setting[0] + "=" + setting[1]
