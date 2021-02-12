@@ -72,7 +72,7 @@ def web_app(
         "--path",
         "$(@D)",
         "--aliases",
-        json.encode(aliases),
+        encode_dict(aliases),
     ]
 
     if show_bundle_report == True:
@@ -118,3 +118,10 @@ def web_app(
             "ibazel_notify_changes",
         ],
     )
+
+
+def encode_dict(output):
+    return "|".join([
+        setting[0] + "=" + setting[1]
+        for setting in output.items()
+    ])

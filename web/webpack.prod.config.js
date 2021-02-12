@@ -19,6 +19,21 @@ function resolveTsconfigPathsToAlias({tsconfigPath, basePath}) {
     }, {});
 }
 
+
+const parseBazelDict = output => {
+    if (!output) {
+        return {};
+    }
+
+    return output.split('|').reduce((acc, it) => {
+        const keyValue = it.split('=');
+        return {
+            ...acc,
+            [keyValue[0]]: keyValue[1],
+        };
+    }, {});
+};
+
 module.exports = (env, argv) =>
     ({
         mode: 'production',
@@ -30,7 +45,7 @@ module.exports = (env, argv) =>
                     tsconfigPath: path.resolve(argv.tsconfig),
                     basePath: process.cwd(),
                 }),
-                ...JSON.parse(argv.aliases || "{}")
+                ...parseBazelDict(argv.aliases)
             }
         },
         output: {
