@@ -106,7 +106,6 @@ def web_app(
             "--index",
             "$(location " + dev_index + ")",
         ],
-        install_source_map_support = False,
         data = [
             ts_transpiled_sources,
             webpack_dev_config,

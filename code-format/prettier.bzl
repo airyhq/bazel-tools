@@ -12,7 +12,6 @@ def prettier(srcs, config = None, ignore = None):
             "@npm//prettier",
         ] + srcs,
         entry_point = "@npm//:node_modules/prettier/bin-prettier.js",
-        install_source_map_support = False,
         templated_args = [
             "--check",
             "--config $(rootpath " + config + ")",
