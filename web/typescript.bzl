@@ -1,6 +1,6 @@
 load("@com_github_airyhq_bazel_tools//web:files.bzl", "copy_filegroups")
 load("@com_github_airyhq_bazel_tools//code-format:prettier.bzl", "check_pkg")
-load("@npm_bazel_typescript//:index.bzl", lib_ts = "ts_library")
+load("@npm//@bazel/typescript:index.bzl", lib_ts = "ts_library")
 
 """
 Usage

@@ -7,8 +7,9 @@
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@babel/preset-env": "^7.12.7",
+    "@bazel/bazelisk": "^1.7.5",
     "@bazel/ibazel": "^0.14.0",
-    "@bazel/typescript": "1.6.0",
+    "@bazel/typescript": "^3.2.0",
     "@svgr/webpack": "^5.5.0",
     "connect-history-api-fallback": "^1.6.0",
     "copy-webpack-plugin": "^6.3.2",

@@ -21,7 +21,6 @@ nodejs_binary(
         "@npm//prettier",
     ],
     entry_point = "@npm//:node_modules/prettier/bin-prettier.js",
-    install_source_map_support = False,
     templated_args = [
         # This is a little trick we need to do in order to run prettier in the workspace root
         # The check_prettier.sh executable can not be used in other executable rules
