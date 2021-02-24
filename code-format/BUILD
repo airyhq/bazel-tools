@@ -1,18 +1,17 @@
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+load("//code-format:buildifier.bzl", "check_pkg")
+
+check_pkg()
 
 package(default_visibility = ["//visibility:public"])
 
 exports_files([
     ".prettierignore",
     ".prettierrc.json",
+    "constants.bzl",
     "checkstyle.xml",
 ])
-
-buildifier(
-    name = "check_buildifier",
-    mode = "diff",
-)
 
 nodejs_binary(
     name = "fix_prettier",
