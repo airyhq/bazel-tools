@@ -45,6 +45,7 @@ Checking a set of Type- or Javascript source files:
 load("@com_github_airyhq_bazel_tools//code-format:prettier.bzl", "prettier")
 
 prettier(
+    name = "prettier",
     srcs = ["index.js"],
     config = "//:.prettierrc.json" # Defaults to code-format/.prettierrc.json
     ignore = "//:.prettierignore" # Defaults to code-format/.prettierignore
@@ -79,6 +80,7 @@ Checking a set of Java source files:
 load("@com_github_airyhq_bazel_tools//code-format:checkstyle.bzl", "checkstyle")
 
 checkstyle(
+    name = "checkstyle",
     srcs = ["src/main/java/airy/core/Main.java"],
     config = "//:checkstyle.xml" # Defaults to code-format/checkstyle.xml
 )

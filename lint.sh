@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 echo "Running Bazel lint"
-bazel run //code-format:check_buildifier
+bazel test --test_tag_filters=lint
