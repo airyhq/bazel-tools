@@ -102,11 +102,12 @@ bazel test //my/package:checkstyle
 
 [Buildifier](https://github.com/bazelbuild/buildtools/tree/master/buildifier) is used for linting Bazel `BUILD` and `.bzl` files.
 
-Because Bazel files cannot be used as source files we cannot configure them as a package level test.
-So instead to lint your files, you can run:
+Macro to check all starlark source files in a package:
 
-```shell script
-bazel run @com_github_airyhq_bazel_tools//code-format:check_buildifier
+```python
+load("@com_github_airyhq_bazel_tools//code-format:buildifier.bzl", "check_pkg")
+
+check_pkg()
 ```
 
 To try fixing buildifier lint issues you can run:
