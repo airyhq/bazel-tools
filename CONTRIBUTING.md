@@ -34,7 +34,7 @@ bazel build //...
 and build a specific project like so:
 
 ```sh
-bazel build //code-format:all
+bazel build //lint:all
 ```
 
 ### Lint
@@ -72,20 +72,20 @@ dig deeper into projects. Here are a few examples:
 
 ```sh
 # show all deps of a given project
-bazel query "deps(//code-format:all)" --output label
+bazel query "deps(//lint:all)" --output label
 
 # show the available tests of a given project
-bazel query "tests(//code-format:all)" --output label
+bazel query "tests(//lint:all)" --output label
 
 # show all the packages under a specific path
-bazel query "code-format/..." --output package
+bazel query "lint/..." --output package
 ```
 
 If you are not familiar with a specific project, you can also run the following
 query:
 
 ```sh
-bazel query "code-format/..."
+bazel query "lint/..."
 ```
 
 The query shows all the targets produced under that specified package. It can

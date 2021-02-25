@@ -17,7 +17,7 @@ web_library(
 parameters:
 
 name            - Unique name of the build rule. The dev server rule will be called name_server
-app_lib         - Label of the ts_library to run the tests on
+app_lib         - Label of the ts_web_library to run the tests on
 entry           - Relative path to your compiled index.js
 output          - Dictionary that gets applied to the webpack output https://webpack.js.org/configuration/output/
 externals       - (optional) Dependencies that should not be bundled, see https://webpack.js.org/guides/author-libraries/#externalize-lodash
