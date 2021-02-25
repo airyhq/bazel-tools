@@ -1,7 +1,8 @@
 load("@rules_java//java:defs.bzl", "java_test")
 
-def checkstyle(name, srcs, config = None):
-    config = config if config else "@com_github_airyhq_bazel_tools//code-format:checkstyle.xml"
+def checkstyle(name = "checkstyle", srcs = None, config = None):
+    srcs = srcs if srcs else native.glob(["**/*.java"])
+    config = config if config else "@com_github_airyhq_bazel_tools//lint:checkstyle.xml"
 
     java_test(
         name = "checkstyle",
@@ -20,9 +21,3 @@ def checkstyle(name, srcs, config = None):
         ],
         tags = ["lint"],
     )
-
-# Add code style checking to all java files in package if not already defined
-def check_pkg(name = "checkstyle"):
-    existing_rules = native.existing_rules().keys()
-    if "checkstyle" not in existing_rules:
-        checkstyle(name = checkstyle, srcs = native.glob(["**/*.java"]))

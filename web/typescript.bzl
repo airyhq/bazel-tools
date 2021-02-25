@@ -1,11 +1,12 @@
 load("@com_github_airyhq_bazel_tools//web:files.bzl", "copy_filegroups")
-load("@com_github_airyhq_bazel_tools//code-format:prettier.bzl", "check_pkg")
-load("@npm//@bazel/typescript:index.bzl", lib_ts = "ts_library")
+load("@com_github_airyhq_bazel_tools//lint:prettier.bzl", "prettier")
+load("@com_github_airyhq_bazel_tools//lint:eslint.bzl", "eslint")
+load("@npm//@bazel/typescript:index.bzl", "ts_library")
 
 """
 Usage
 
-ts_library(
+ts_web_library(
     name = "mylib",
     srcs = ["index.ts"],
     deps = [
@@ -29,7 +30,7 @@ tsconfig -  (optional) It's possible to extend tsconfigs! Give it a try, if
 
 ASSETS_SUFFIX = "_assets"
 
-def ts_library(name, srcs = None, deps = None, data = None, tsconfig = None, lint_rule = check_pkg):
+def ts_web_library(name, srcs = None, deps = None, data = None, tsconfig = None, disable_lint = False):
     tsconfig = "//:tsconfig.json" if not tsconfig else tsconfig
     deps = [] if not deps else deps
     srcs = native.glob(["**/*.tsx", "**/*.ts"]) if not srcs else srcs
@@ -43,8 +44,11 @@ def ts_library(name, srcs = None, deps = None, data = None, tsconfig = None, lin
         "**/*.json",
     ])
 
-    if lint_rule != None:
-        lint_rule()
+    if disable_lint != True:
+        if "prettier" not in native.existing_rules().keys():
+            prettier()
+        if "eslint" not in native.existing_rules().keys():
+            eslint()
 
     data = default_data_glob if not data else data
 
@@ -60,7 +64,7 @@ def ts_library(name, srcs = None, deps = None, data = None, tsconfig = None, lin
         ],
     )
 
-    lib_ts(
+    ts_library(
         name = name,
         module_name = name,
         srcs = srcs,
@@ -72,7 +76,7 @@ def ts_library(name, srcs = None, deps = None, data = None, tsconfig = None, lin
         deps = deps,
     )
 
-# Helper function to get asset target from a ts_library target
+# Helper function to get asset target from a ts_web_library target
 def get_assets_label(lib):
     # Fully qualified name e.g. //package/lib:lib
     if ":" in lib:

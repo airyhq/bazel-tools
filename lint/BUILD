@@ -1,14 +1,22 @@
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
-load("//code-format:buildifier.bzl", "check_pkg")
+load("//lint:buildifier.bzl", "check_pkg")
+load("//lint:prettier.bzl", "prettier")
+load("//lint:eslint.bzl", "eslint")
 
 check_pkg()
+
+prettier()
+
+eslint()
 
 package(default_visibility = ["//visibility:public"])
 
 exports_files([
     ".prettierignore",
     ".prettierrc.json",
+    ".eslintrc",
+    ".eslintignore",
     "constants.bzl",
     "checkstyle.xml",
 ])

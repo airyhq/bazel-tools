@@ -20,7 +20,7 @@ web_app(
 parameters:
 
 name            - Unique name of the build rule. The dev server rule will be called name_server
-app_lib         - Label of the ts_library to run the tests on
+app_lib         - Label of the ts_web_library to run the tests on
 static_assets   - (optional) Filegroup (list of files) that should be copied "as is" to the webroot.
                   Files need to be in a folder called 'public' so that we can implicitly infer their purpose
 entry           - Relative path to your compiled index.js

@@ -1,8 +1,13 @@
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_test")
 
-def prettier(name, srcs, config = None, ignore = None):
-    config = config if config else "@com_github_airyhq_bazel_tools//code-format:.prettierrc.json"
-    ignore = ignore if ignore else "@com_github_airyhq_bazel_tools//code-format:.prettierignore"
+def prettier(
+        name = "prettier",
+        srcs = None,
+        config = None,
+        ignore = None):
+    srcs = srcs if srcs else native.glob(["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.scss", "**/*.css"])
+    config = config if config else "@com_github_airyhq_bazel_tools//lint:.prettierrc.json"
+    ignore = ignore if ignore else "@com_github_airyhq_bazel_tools//lint:.prettierignore"
 
     nodejs_test(
         name = name,
@@ -27,4 +32,4 @@ def prettier(name, srcs, config = None, ignore = None):
 def check_pkg(name = "prettier"):
     existing_rules = native.existing_rules().keys()
     if name not in existing_rules:
-        prettier(name = name, srcs = native.glob(["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.scss", "**/*.css"]))
+        prettier()

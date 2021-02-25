@@ -42,22 +42,14 @@ We use language specific linters:
 Checking a set of Type- or Javascript source files:
 
 ```python
-load("@com_github_airyhq_bazel_tools//code-format:prettier.bzl", "prettier")
+load("@com_github_airyhq_bazel_tools//lint:prettier.bzl", "prettier")
 
 prettier(
     name = "prettier",
-    srcs = ["index.js"],
-    config = "//:.prettierrc.json" # Defaults to code-format/.prettierrc.json
-    ignore = "//:.prettierignore" # Defaults to code-format/.prettierignore
+    srcs = ["index.js"], # Defaults to all js,jsx,ts,tsx,scss,css files
+    config = "//:.prettierrc.json", # Defaults to lint/.prettierrc.json
+    ignore = "//:.prettierignore", # Defaults to lint/.prettierignore
 )
-```
-
-As a convenience Macro to check all `.{js,jsx,ts,tsx,scss,css}` source files:
-
-```python
-load("@com_github_airyhq_bazel_tools//code-format:prettier.bzl", "check_pkg")
-
-check_pkg()
 ```
 
 Both rules will add a `:prettier` test target to your package, which can be run like so:
@@ -69,7 +61,28 @@ bazel test //my/package:prettier
 To try fixing prettier issues you can run:
 
 ```shell script
-bazel run @com_github_airyhq_bazel_tools//code-format:fix_prettier
+bazel run @com_github_airyhq_bazel_tools//lint:fix_prettier
+```
+
+### Eslint
+
+Checking a set of Type- or Javascript source files:
+
+```python
+load("@com_github_airyhq_bazel_tools//lint:eslint.bzl", "eslint")
+
+eslint(
+    name = "prettier",
+    srcs = ["index.ts"], # Defaults to all js,jsx,ts,tsx,scss,css files
+    config = "//:.eslint.json", # Defaults to lint/.eslint.json
+    ignore = "//:.eslintignore", # Defaults to lint/.eslintignore
+)
+```
+
+This rule will add an `:eslint` test target to your package, which can be run like so:
+
+```shell script
+bazel test //my/package:eslint
 ```
 
 ### Checkstyle
@@ -77,21 +90,13 @@ bazel run @com_github_airyhq_bazel_tools//code-format:fix_prettier
 Checking a set of Java source files:
 
 ```python
-load("@com_github_airyhq_bazel_tools//code-format:checkstyle.bzl", "checkstyle")
+load("@com_github_airyhq_bazel_tools//lint:checkstyle.bzl", "checkstyle")
 
 checkstyle(
     name = "checkstyle",
-    srcs = ["src/main/java/airy/core/Main.java"],
-    config = "//:checkstyle.xml" # Defaults to code-format/checkstyle.xml
+    srcs = ["src/main/java/airy/core/Main.java"], #  Defaults to all .java files in package
+    config = "//:checkstyle.xml" # Defaults to lint/checkstyle.xml
 )
-```
-
-As a convenience Macro to check all Java source files in a package:
-
-```python
-load("@com_github_airyhq_bazel_tools//code-format:checkstyle.bzl", "check_pkg")
-
-check_pkg()
 ```
 
 Both rules will add a `:checkstyle` test target to your package, which can be run like so:
@@ -107,7 +112,7 @@ bazel test //my/package:checkstyle
 Macro to check all starlark source files in a package:
 
 ```python
-load("@com_github_airyhq_bazel_tools//code-format:buildifier.bzl", "check_pkg")
+load("@com_github_airyhq_bazel_tools//lint:buildifier.bzl", "check_pkg")
 
 check_pkg()
 ```
@@ -115,7 +120,7 @@ check_pkg()
 To try fixing buildifier lint issues you can run:
 
 ```shell script
-bazel run @com_github_airyhq_bazel_tools//code-format:fix_buildifier
+bazel run @com_github_airyhq_bazel_tools//lint:fix_buildifier
 ```
 
 These two rules are a very shallow wrapper of buildifier, but we package them for convenience. If you are looking
@@ -124,23 +129,17 @@ to use its extensive API you can replace this implementation with your own.
 ## Web builds
 
 For web builds we use the [rules_nodejs](https://github.com/bazelbuild/rules_nodejs) repository. You have to install the 
-following npm packages with `rules_nodejs` to use the web rules:
+development dependencies listed in the [`package.json`](./package.json) to use the web rules. 
 
-```
-yarn add -D path minimist webpack@4.43.0 webpack-dev-middleware express connect-history-api-fallback html-webpack-plugin \
-copy-webpack-plugin@6.3.2 terser-webpack-plugin@5.0.3 @babel/core @babel/preset-env @bazel/ibazel @bazel/typescript@1.6.0 \
-@svgr/webpack ejs-compiled-loader node-sass react-hot-loader style-loader webpack-bundle-analyzer
-``` 
+### `ts_web_library`
 
-### `ts_library`
-
-This is a thin wrapper around the `ts_library` provided by `rules_nodejs`. It also aggregates asset dependencies so
+This is a thin wrapper around the `ts_web_library` provided by `rules_nodejs`. It also aggregates asset dependencies so
 that they are available to downstream bundling. 
 
 ```python
-load("@com_github_airyhq_bazel_tools//web:typescript.bzl", "ts_library")
+load("@com_github_airyhq_bazel_tools//web:typescript.bzl", "ts_web_library")
 
-ts_library(
+ts_web_library(
     name = "mylib",
     srcs = ["index.ts"],
     deps = [
@@ -192,7 +191,7 @@ web_app(
 **Parameters:**
 
 - `name`    Unique name of the build rule. The dev server rule will be called `name_server`
-- `app_lib` Label of the app `ts_library`
+- `app_lib` Label of the app `ts_web_library`
 - `static_assets`   (optional) Filegroup (list of files) that should be copied "as is" to the webroot.
                   Files need to be in a folder called 'public'.
 - `entry`   Relative path to your compiled index.js
@@ -200,7 +199,7 @@ web_app(
 - `aliases` (optional) applied to webpack [alias](https://webpack.js.org/configuration/resolve/#resolvealias)
 - `show_bundle_report`  If set to true generates a static bundle size report
 - `dev_index`   (optional) index.html file used for the devserver (defaults to `index`)
-- `module_deps` (optional) app_lib dependencies on `ts_library` targets
+- `module_deps` (optional) app_lib dependencies on `ts_web_library` targets
 
 
 ### `web_library`
@@ -222,13 +221,13 @@ entry = "my/web/package/src/index.js",
 **Parameters:**
 
 - `name`    Unique name of the build rule.
-- `app_lib` Label of the app `ts_library`
+- `app_lib` Label of the app `ts_web_library`
 - `entry`   Relative path to your compiled index.js
 - `output`  Dictionary that gets applied to the webpack output https://webpack.js.org/configuration/output/
 - `aliases` (optional) applied to webpack [alias](https://webpack.js.org/configuration/resolve/#resolvealias)
 - `show_bundle_report`  If set to true generates a static bundle size report
 - `externals`   (optional) Dependencies that should not be bundled, see https://webpack.js.org/guides/author-libraries/#externalize-lodash
-- `module_deps` (optional) app_lib dependencies on `ts_library` targets
+- `module_deps` (optional) app_lib dependencies on `ts_web_library` targets
 
 ## Java
 

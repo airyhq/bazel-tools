@@ -1,5 +1,5 @@
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier_test")
-load("//code-format:constants.bzl", "STARLARK_FILE_GLOB")
+load("//lint:constants.bzl", "STARLARK_FILE_GLOB")
 
 # buildifier_test implementation reference https://github.com/bazelbuild/buildtools/pull/929
 def check_pkg(name = "buildifier", exclude_patterns = ["**/node_modules/**"]):
