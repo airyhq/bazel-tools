@@ -72,8 +72,8 @@ Checking a set of Type- or Javascript source files:
 load("@com_github_airyhq_bazel_tools//lint:eslint.bzl", "eslint")
 
 eslint(
-    name = "prettier",
-    srcs = ["index.ts"], # Defaults to all js,jsx,ts,tsx,scss,css files
+    name = "eslint",
+    srcs = ["index.ts"], # Defaults to all js,jsx,ts,tsx,scss,css files in package
     config = "//:.eslint.json", # Defaults to lint/.eslint.json
     ignore = "//:.eslintignore", # Defaults to lint/.eslintignore
 )
@@ -133,7 +133,7 @@ development dependencies listed in the [`package.json`](./package.json) to use t
 
 ### `ts_web_library`
 
-This is a thin wrapper around the `ts_web_library` provided by `rules_nodejs`. It also aggregates asset dependencies so
+This is a thin wrapper around the `ts_library` provided by `rules_nodejs`. It also aggregates asset dependencies so
 that they are available to downstream bundling. 
 
 ```python
@@ -153,7 +153,7 @@ ts_web_library(
 
 **Parameters:**
 
-- `name`    Unique name of the rule. Will also be used as the js module name so that you can import it like so
+- `name`    Unique name of the rule. This will also be used as the js module name so that you can import it like so
             `import {someFunction} from 'mylib'`.
 - `srcs`    (optional) Your components source files. By default we glob all `.ts` and `.tsx` files.
 - `deps`    (optional) Node module dependencies required to compile the library.
