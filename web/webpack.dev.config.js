@@ -21,133 +21,138 @@ function resolveTsconfigPathsToAlias({tsconfigPath, basePath}) {
   }, {});
 }
 
-module.exports = (env, argv) => ({
-  mode: 'development',
-  target: 'web',
-  bail: false,
-
-  entry: ['react-hot-loader/patch', 'webpack-hot-middleware/client', path.resolve(argv.entry)],
-
-  output: {
+module.exports = (env, argv) => {
+  const output = {
     publicPath: '/',
     ...JSON.parse(argv.outputDict || "{}"),
-  },
+  };
 
-  optimization: {
-    minimize: false,
-  },
+  return ({
+    mode: 'development',
+    target: 'web',
+    bail: false,
 
-  resolve: {
-    alias: resolveTsconfigPathsToAlias({
-      tsconfigPath: path.resolve(argv.tsconfig),
-      basePath: process.cwd(),
-    }),
-  },
+    entry: ['react-hot-loader/patch', 'webpack-hot-middleware/client', path.resolve(argv.entry)],
 
-  devtool: 'cheap-module-eval-source-map',
+    output,
 
-  module: {
-    rules: [
-      {
-        test: /\.(mjs|js)$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        options: {
-          cacheDirectory: true,
-          presets: [
-            [
-              '@babel/preset-env',
-              {
-                useBuiltIns: 'entry',
-                corejs: 3,
-                modules: false,
-                targets: ['>0.2%', 'not dead', 'not op_mini all'],
-              },
+    optimization: {
+      minimize: false,
+    },
+
+    resolve: {
+      alias: resolveTsconfigPathsToAlias({
+        tsconfigPath: path.resolve(argv.tsconfig),
+        basePath: process.cwd(),
+      }),
+    },
+
+    devtool: 'cheap-module-eval-source-map',
+
+    module: {
+      rules: [
+        {
+          test: /\.(mjs|js)$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+            presets: [
+              [
+                '@babel/preset-env',
+                {
+                  useBuiltIns: 'entry',
+                  corejs: 3,
+                  modules: false,
+                  targets: ['>0.2%', 'not dead', 'not op_mini all'],
+                },
+              ],
             ],
-          ],
-        },
-      },
-      {
-        test: /\.(scss|css)$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-              modules: {
-                auto: true,
-                localIdentName: '[name]_[local]-[hash:base64:5]',
-              },
-            },
           },
-          'sass-loader',
-        ],
-      },
-      {
-        test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2)(\?.*)?$/,
-        loader: 'file-loader',
-        options: {
-          name: 'media/[name].[hash:8].[ext]',
         },
-      },
-      {
-        test: /\.svg$/,
-        use: [
-          {
-            loader: '@svgr/webpack',
-            options: {
-              titleProp: true,
-              svgoConfig: {
-                plugins: {
-                  removeViewBox: false,
+        {
+          test: /\.(scss|css)$/,
+          use: [
+            'style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 1,
+                modules: {
+                  auto: true,
+                  localIdentName: '[name]_[local]-[hash:base64:5]',
                 },
               },
-              template: ({template}, opts, {imports, interfaces, componentName, props, jsx, exports}) => {
-                const plugins = ['jsx'];
-                if (opts.typescript) {
-                  plugins.push('typescript');
-                }
-                const typeScriptTpl = template.smart({plugins});
-                return typeScriptTpl.ast`
-                                    ${imports}
-                                    ${interfaces}
-                                    function ${componentName}(${props}) {
-                                      props = { title: '', ...props };
-                                      return ${jsx};
-                                    }
-                                    ${exports}
-                                    `;
+            },
+            'sass-loader',
+          ],
+        },
+        {
+          test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2)(\?.*)?$/,
+          loader: 'file-loader',
+          options: {
+            name: 'media/[name].[hash:8].[ext]',
+          },
+        },
+        {
+          test: /\.svg$/,
+          use: [
+            {
+              loader: '@svgr/webpack',
+              options: {
+                titleProp: true,
+                svgoConfig: {
+                  plugins: {
+                    removeViewBox: false,
+                  },
+                },
+                template: ({template}, opts, {imports, interfaces, componentName, props, jsx, exports}) => {
+                  const plugins = ['jsx'];
+                  if (opts.typescript) {
+                    plugins.push('typescript');
+                  }
+                  const typeScriptTpl = template.smart({plugins});
+                  return typeScriptTpl.ast`
+                                      ${imports}
+                                      ${interfaces}
+                                      function ${componentName}(${props}) {
+                                        props = { title: '', ...props };
+                                        return ${jsx};
+                                      }
+                                      ${exports}
+                                      `;
+                },
               },
             },
-          },
-          // Use url-loader to be able to inject into img src
-          // https://www.npmjs.com/package/@svgr/webpack#using-with-url-loader-or-file-loader
-          'url-loader',
-        ],
-      },
-    ],
-  },
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': "'development'",
-    }),
-    new CopyWebpackPlugin([
-      {
-        from: '**/public/**/*',
-        ignore: ['**/node_modules/**'],
-        transformPath(targetPath) {
-          const splits = targetPath.split('public/');
-          return splits[1];
+            // Use url-loader to be able to inject into img src
+            // https://www.npmjs.com/package/@svgr/webpack#using-with-url-loader-or-file-loader
+            'url-loader',
+          ],
         },
-      },
-    ]),
-    new HtmlWebpackPlugin({
-      template: '!!ejs-compiled-loader!' + path.resolve(argv.index),
-      inject: true,
-      filename: 'index.html',
-    }),
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-  ],
-});
+      ],
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': "'development'",
+        'process.env.PUBLIC_PATH': `'${output.publicPath}'`,
+      }),
+      new CopyWebpackPlugin([
+        {
+          from: '**/public/**/*',
+          ignore: ['**/node_modules/**'],
+          transformPath(targetPath) {
+            const splits = targetPath.split('public/');
+            return splits[1];
+          },
+        },
+      ]),
+      new HtmlWebpackPlugin({
+        template: '!!ejs-compiled-loader!' + path.resolve(argv.index),
+        inject: true,
+        filename: 'index.html',
+      }),
+      new webpack.optimize.OccurrenceOrderPlugin(),
+      new webpack.HotModuleReplacementPlugin(),
+    ],
+  });
+};

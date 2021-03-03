@@ -19,8 +19,15 @@ function resolveTsconfigPathsToAlias({tsconfigPath, basePath}) {
     }, {});
 }
 
-module.exports = (env, argv) =>
-    ({
+module.exports = (env, argv) => {
+    const output = {
+        path: path.resolve(argv.path),
+        publicPath: '/',
+        filename: 'js/[name].[chunkhash:8].js',
+        ...JSON.parse(argv.outputDict || "{}")
+    }
+
+    return ({
         mode: 'production',
         target: 'web',
         bail: true, // stop compilation on first error
@@ -33,12 +40,7 @@ module.exports = (env, argv) =>
                 ...JSON.parse(argv.aliases || "{}")
             }
         },
-        output: {
-            path: path.resolve(argv.path),
-            publicPath: '/',
-            filename: 'js/[name].[chunkhash:8].js',
-            ...JSON.parse(argv.outputDict || "{}")
-        },
+        output,
 
         optimization: {
             minimize: true,
@@ -167,6 +169,7 @@ module.exports = (env, argv) =>
         plugins: [
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': "'production'",
+                'process.env.PUBLIC_PATH': `'${output.publicPath}'`,
             }),
             new CopyWebpackPlugin([
                 {
@@ -192,3 +195,4 @@ module.exports = (env, argv) =>
             ] : []
         ),
     });
+};
