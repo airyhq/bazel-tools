@@ -33,7 +33,7 @@ module.exports = (env, argv) => ({
     },
     output: {
         path: path.resolve(argv.path),
-        ...JSON.parse(argv.outputDict || "{}"),
+        ...JSON.parse(argv.outputDict || "{}")
     },
 
     optimization: {
