@@ -18,4 +18,4 @@ common:ci --color=no
 
 build:ci --noshow_progress
 build:ci --verbose_failures
-build:ci --disk_cache=~/.cache/bazel
+build:ci --remote_cache=https://storage.googleapis.com/airy-ci-cache

@@ -15,13 +15,6 @@ jobs:
           java-version: '11'
           architecture: 'x64'
 
-      - name: Mount bazel cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            /home/runner/.cache/bazel
-          key: bazel
-
       - name: Install bazelisk
         run: |
           curl -LO "https://github.com/bazelbuild/bazelisk/releases/download/v1.1.0/bazelisk-linux-amd64"
@@ -31,8 +24,10 @@ jobs:
 
       - name: Enable CI settings
         run: |
+          echo "$GCS_SA_KEY" > key.json
           cat <<EOF >>.bazelrc
             common --config=ci
+            build:ci --google_credentials=key.json
           EOF
 
       - name: Lint
