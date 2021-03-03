@@ -32,13 +32,13 @@ def web_library(
         "--tsconfig",
         "$(location " + ts_config + ")",
         "--outputDict",
-        json.encode(output),
+        "'" + json.encode(output) + "'",
         "--externalDict",
-        json.encode(externals),
+        "'" + json.encode(externals) + "'",
         "--path",
         "$(@D)",
         "--aliases",
-        json.encode(aliases),
+        "'" + json.encode(aliases) + "'",
     ]
 
     if show_bundle_report == True:
