@@ -29,6 +29,8 @@ jobs:
             common --config=ci
             build:ci --google_credentials=key.json
           EOF
+        env:
+          GCS_SA_KEY: ${{secrets.GCS_SA_KEY}}
 
       - name: Lint
         run: |
