@@ -2,41 +2,12 @@ load("@com_github_airyhq_bazel_tools//web:typescript.bzl", "get_assets_label")
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
 load("@npm//webpack-cli:index.bzl", webpack = "webpack_cli")
 
-"""
-Usage
-
-web_app(
-    name = "bundle",
-    app_lib = ":app",
-    static_assets = "//ui/web/inbox/public",
-    entry = "ui/web/inbox/src/index.js",
-    index = ":index.html",
-    dev_index = ":dev_index.html",
-    module_deps = module_deps,
-    webpack_prod_config = ":webpack.prod.config.js"
-    webpack_dev_config = ":webpack.dev.config.js"
-)
-
-parameters:
-
-name            - Unique name of the build rule. The dev server rule will be called name_server
-app_lib         - Label of the ts_web_library to run the tests on
-static_assets   - (optional) Filegroup (list of files) that should be copied "as is" to the webroot.
-                  Files need to be in a folder called 'public' so that we can implicitly infer their purpose
-entry           - Relative path to your compiled index.js
-index           - index.html file used for the build
-aliases         - (optional) Modules to alias https://webpack.js.org/guides/author-libraries/#externalize-lodash
-dev_index       - (optional) index.html file used for the devserver (defaults to bundle index)
-module_deps     - (optional) app_lib dependencies on our own typescript libraries (TODO infer this)
-
-(optional) webpack_prod_config and webpack_dev_config can be used to supply custom dev and prod rules
-"""
-
 def web_app(
         name,
         app_lib,
         entry,
         index,
+        output = {},
         static_assets = None,
         module_deps = [],
         aliases = {},
@@ -103,6 +74,8 @@ def web_app(
             "$(execpath " + webpack_dev_config + ")",
             "--tsconfig",
             "$(location " + ts_config + ")",
+            "--outputDict",
+            json.encode(output),
             "--index",
             "$(location " + dev_index + ")",
         ],

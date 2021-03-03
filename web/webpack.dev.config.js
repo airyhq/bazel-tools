@@ -30,6 +30,7 @@ module.exports = (env, argv) => ({
 
   output: {
     publicPath: '/',
+    ...JSON.parse(argv.outputDict || "{}"),
   },
 
   optimization: {

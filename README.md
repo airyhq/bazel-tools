@@ -182,6 +182,9 @@ web_app(
     entry = "my/web/package/src/index.js",
     index = ":index.html",
     dev_index = ":dev_index.html",
+    output = {
+        "publicPath": "/blog/"
+    },
     module_deps = module_deps,
     webpack_prod_config = ":webpack.prod.config.js",
     webpack_dev_config = ":webpack.dev.config.js",
@@ -196,6 +199,7 @@ web_app(
                   Files need to be in a folder called 'public'.
 - `entry`   Relative path to your compiled index.js
 - `index`   index.html file used for the build
+- `output`  (optional) Dictionary that gets applied to the webpack output https://webpack.js.org/configuration/output/
 - `aliases` (optional) applied to webpack [alias](https://webpack.js.org/configuration/resolve/#resolvealias)
 - `show_bundle_report`  If set to true generates a static bundle size report
 - `dev_index`   (optional) index.html file used for the devserver (defaults to `index`)

@@ -37,6 +37,7 @@ module.exports = (env, argv) =>
             path: path.resolve(argv.path),
             publicPath: '/',
             filename: 'js/[name].[chunkhash:8].js',
+            ...JSON.parse(argv.outputDict || "{}")
         },
 
         optimization: {
