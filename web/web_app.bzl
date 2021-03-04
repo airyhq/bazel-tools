@@ -38,6 +38,8 @@ def web_app(
         "$(execpath " + webpack_prod_config + ")",
         "--tsconfig",
         "$(location " + ts_config + ")",
+        "--outputDict",
+        "'" + json.encode(output) + "'",
         "--index",
         "$(location " + index + ")",
         "--path",
@@ -63,7 +65,7 @@ def web_app(
     )
 
     dev_index = index if not dev_index else dev_index
-    
+
     nodejs_binary(
         name = name + "_server",
         entry_point = "@com_github_airyhq_bazel_tools//web:runWebpackDevServer.js",

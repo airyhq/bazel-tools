@@ -24,9 +24,10 @@ const instance = middleware(compiler, {
 
 app.use(
   require('connect-history-api-fallback')({
+    index: config.output.publicPath + "index.html",
     rewrites: {
-      from: new RegExp('/[^.]*$'),
-      to: `/index.html`,
+      from: new RegExp(config.output.publicPath + '[^.]*$'),
+      to: config.output.publicPath + "index.html",
     },
   })
 );
