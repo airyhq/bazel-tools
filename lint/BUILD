@@ -4,13 +4,13 @@ load("//lint:buildifier.bzl", "check_pkg")
 load("//lint:prettier.bzl", "prettier")
 load("//lint:eslint.bzl", "eslint")
 
+package(default_visibility = ["//visibility:public"])
+
 check_pkg()
 
 prettier()
 
 eslint()
-
-package(default_visibility = ["//visibility:public"])
 
 exports_files([
     ".prettierignore",
@@ -19,6 +19,7 @@ exports_files([
     ".eslintignore",
     "constants.bzl",
     "checkstyle.xml",
+    "shellcheck.sh",
 ])
 
 nodejs_binary(
