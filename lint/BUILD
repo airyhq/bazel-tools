@@ -1,5 +1,4 @@
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
-load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
 load("//lint:buildifier.bzl", "check_pkg")
 load("//lint:eslint.bzl", "eslint")
 
