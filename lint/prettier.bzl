@@ -38,7 +38,7 @@ def _prettier_impl(
         **kwargs):
     config = kwargs.pop("config", "@com_github_airyhq_bazel_tools//lint:.prettierrc.json")
     ignore = kwargs.pop("ignore", "@com_github_airyhq_bazel_tools//lint:.prettierignore")
-
+    
     rule(
         name = name,
         data = [
