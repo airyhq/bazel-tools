@@ -1,8 +1,7 @@
 def shellcheck(
         name = "shellcheck",
-        scripts = None,
-        rootpath = None):
-    scripts = scripts if scripts else []
+        scripts = None):
+    scripts = scripts if scripts else native.glob(["**/*.sh"])
 
     native.sh_test(
         name = name,
