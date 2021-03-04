@@ -7,10 +7,11 @@ def fix_prettier(
         name = name,
         rule = nodejs_binary,
         args = [
-            "--node_options=--require=$$(rlocation $(rootpath chdir.js))",
-            "'**/*.{css,scss,ts,tsx,js}'",
+            "--node_options=--require=$$(rlocation $(rootpath @com_github_airyhq_bazel_tools//lint:chdir.js))",
+            "'./**/*.{css,scss,ts,tsx,js,jsx,md}'",
             "--write",
         ],
+        srcs = [],
         **kwargs
     )
 
@@ -18,7 +19,7 @@ def prettier(
         name = "prettier",
         srcs = None,
         **kwargs):
-    srcs = srcs if srcs else native.glob(["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.scss", "**/*.css"])
+    srcs = srcs if srcs else native.glob(["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.scss", "**/*.css", "**/*.md"])
     _prettier_impl(
         name = name,
         rule = nodejs_test,
@@ -27,26 +28,6 @@ def prettier(
         ],
         srcs = srcs,
         **kwargs
-    )
-
-
-    nodejs_test(
-        name = name,
-        data = [
-            config,
-            ignore,
-            "@npm//prettier",
-        ] + srcs,
-        entry_point = "@npm//:node_modules/prettier/bin-prettier.js",
-        templated_args = [
-            "--check",
-            "--config $(rootpath " + config + ")",
-            "--ignore-path $(rootpath " + ignore + ")",
-        ] + [
-            "$(rootpath " + src + ")"
-            for src in srcs
-        ],
-        tags = ["lint"],
     )
 
 def _prettier_impl(
@@ -61,7 +42,7 @@ def _prettier_impl(
     rule(
         name = name,
         data = [
-            "chdir.js",
+            "@com_github_airyhq_bazel_tools//lint:chdir.js",
             config,
             ignore,
             "@npm//prettier",
