@@ -49,15 +49,15 @@ def _prettier_impl(
         ] + srcs,
         entry_point = "@npm//:node_modules/prettier/bin-prettier.js",
         templated_args = [
-            "--config $(rootpath " + config + ")",
-            "--ignore-path $(rootpath " + ignore + ")",
+            "--config $$(rlocation $(rootpath " + config + "))",
+            "--ignore-path $$(rlocation $(rootpath " + ignore + "))",
         ] + args + [
             "$(rootpath " + src + ")"
             for src in srcs
         ],
         tags = ["lint"],
     )
-
+#
 # Add code style checking to all web files in package if not already defined
 def check_pkg(name = "prettier"):
     existing_rules = native.existing_rules().keys()
