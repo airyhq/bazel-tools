@@ -57,6 +57,7 @@ def _prettier_impl(
         ],
         tags = ["lint"],
     )
+
 #
 # Add code style checking to all web files in package if not already defined
 def check_pkg(name = "prettier"):
