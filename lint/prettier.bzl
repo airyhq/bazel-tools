@@ -2,6 +2,7 @@ load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary", "nodejs_test")
 
 def fix_prettier(
         name = "fix_prettier",
+        config = None,
         **kwargs):
     _prettier_impl(
         name = name,
@@ -12,11 +13,13 @@ def fix_prettier(
             "--write",
         ],
         srcs = [],
+        config = config,
         **kwargs
     )
 
 def prettier(
         name = "prettier",
+        config = None,
         srcs = None,
         **kwargs):
     srcs = srcs if srcs else native.glob(["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.scss", "**/*.css", "**/*.md"])
@@ -27,6 +30,7 @@ def prettier(
             "--check",
         ],
         srcs = srcs,
+        config = config,
         **kwargs
     )
 
@@ -35,28 +39,35 @@ def _prettier_impl(
         rule,
         args,
         srcs,
+        config = None,
         **kwargs):
-    config = kwargs.pop("config", "@com_github_airyhq_bazel_tools//lint:.prettierrc.json")
     ignore = kwargs.pop("ignore", "@com_github_airyhq_bazel_tools//lint:.prettierignore")
+
+    cmd_args = [
+        "--ignore-path $$(rlocation $(rootpath " + ignore + "))",
+    ] + args + [
+        "$(rootpath " + src + ")"
+        for src in srcs
+    ]
+
+    data = [
+        "@com_github_airyhq_bazel_tools//lint:chdir.js",
+        ignore,
+        "@npm//prettier",
+    ]
+
+    if config != None:
+        cmd_args += ["--config $$(rlocation $(rootpath " + config + "))"] + cmd_args
+        data = [config] + data
 
     rule(
         name = name,
-        data = [
-            "@com_github_airyhq_bazel_tools//lint:chdir.js",
-            config,
-            ignore,
-            "@npm//prettier",
-        ] + srcs,
+        data = data + srcs,
         entry_point = "@npm//:node_modules/prettier/bin-prettier.js",
-        templated_args = [
-            "--config $$(rlocation $(rootpath " + config + "))",
-            "--ignore-path $$(rlocation $(rootpath " + ignore + "))",
-        ] + args + [
-            "$(rootpath " + src + ")"
-            for src in srcs
-        ],
+        templated_args = cmd_args,
         tags = ["lint"],
     )
+
 #
 # Add code style checking to all web files in package if not already defined
 def check_pkg(name = "prettier"):

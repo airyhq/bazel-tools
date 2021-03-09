@@ -1,12 +1,11 @@
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_test")
 
 def eslint(
-        name = "eslint",
+        name,
+        config,
         srcs = None,
-        config = None,
         ignore = None):
     srcs = srcs if srcs else native.glob(["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"])
-    config = config if config else "@com_github_airyhq_bazel_tools//lint:.eslintrc.json"
     ignore = ignore if ignore else "@com_github_airyhq_bazel_tools//lint:.eslintignore"
 
     nodejs_test(

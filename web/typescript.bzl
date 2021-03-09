@@ -1,6 +1,4 @@
 load("@com_github_airyhq_bazel_tools//web:files.bzl", "copy_filegroups")
-load("@com_github_airyhq_bazel_tools//lint:prettier.bzl", "prettier")
-load("@com_github_airyhq_bazel_tools//lint:eslint.bzl", "eslint")
 load("@npm//@bazel/typescript:index.bzl", "ts_library")
 
 """
@@ -25,12 +23,11 @@ deps     -  (optional) Node module dependencies required to build the library
 data     -  (optional) Files needed as imports to your typescript files. By default we glob a typical web file extensions.
 tsconfig -  (optional) It's possible to extend tsconfigs! Give it a try, if
             it fits your use case (https://www.npmjs.com/package/@bazel/typescript#ts_config)
-
 """
 
 ASSETS_SUFFIX = "_assets"
 
-def ts_web_library(name, srcs = None, deps = None, data = None, tsconfig = None, disable_lint = False):
+def ts_web_library(name, srcs = None, deps = None, data = None, tsconfig = None):
     tsconfig = "//:tsconfig.json" if not tsconfig else tsconfig
     deps = [] if not deps else deps
     srcs = native.glob(["**/*.tsx", "**/*.ts"]) if not srcs else srcs
@@ -43,12 +40,6 @@ def ts_web_library(name, srcs = None, deps = None, data = None, tsconfig = None,
         "**/*.svg",
         "**/*.json",
     ])
-
-    if disable_lint != True:
-        if "prettier" not in native.existing_rules().keys():
-            prettier()
-        if "eslint" not in native.existing_rules().keys():
-            eslint()
 
     data = default_data_glob if not data else data
 

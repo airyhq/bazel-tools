@@ -46,8 +46,8 @@ load("@com_github_airyhq_bazel_tools//lint:prettier.bzl", "prettier")
 
 prettier(
     name = "prettier",
+    config = "//:.prettierrc.json",
     srcs = ["index.js"], # Defaults to all js,jsx,ts,tsx,scss,css files
-    config = "//:.prettierrc.json", # Defaults to lint/.prettierrc.json
     ignore = "//:.prettierignore", # Defaults to lint/.prettierignore
 )
 ```
@@ -85,8 +85,8 @@ load("@com_github_airyhq_bazel_tools//lint:eslint.bzl", "eslint")
 
 eslint(
     name = "eslint",
+    config = "//:.eslint.json",
     srcs = ["index.ts"], # Defaults to all js,jsx,ts,tsx,scss,css files in package
-    config = "//:.eslint.json", # Defaults to lint/.eslint.json
     ignore = "//:.eslintignore", # Defaults to lint/.eslintignore
 )
 ```
@@ -227,7 +227,7 @@ web_library(
     name = "bundle",
     app_lib = ":app",
 entry = "my/web/package/src/index.js",
-    module_deps = module_deps,
+    module_deps = ["//package/lib:ts_web_lib_target"],
     output = {
         "publicPath": "/blog/"
     }
