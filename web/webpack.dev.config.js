@@ -140,11 +140,13 @@ module.exports = (env, argv) => {
         patterns: [
           {
             from: '**/public/**/*',
-            ignore: ['**/node_modules/**'],
-            transformPath(targetPath) {
-              const splits = targetPath.split('public/');
-              return splits[1];
-            },
+            globOptions: {
+              ignore: ['**/node_modules/**'],
+              transformPath(targetPath) {
+                const splits = targetPath.split('public/');
+                return splits[1];
+              },
+            }            
           },
         ]
       }),

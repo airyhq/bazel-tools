@@ -18,7 +18,6 @@ const app = express();
 
 const instance = middleware(compiler, {
   publicPath: config.output.publicPath,
-  noInfo: true,
   stats: {colors: true},
 });
 
