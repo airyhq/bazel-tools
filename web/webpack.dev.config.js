@@ -135,6 +135,7 @@ module.exports = (env, argv) => {
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': "'development'",
         'process.env.PUBLIC_PATH': `'${output.publicPath}'`,
+        ...JSON.parse(argv.defines || "{}"),
       }),
       new CopyWebpackPlugin({
         patterns: [
