@@ -138,6 +138,21 @@ bazel run @com_github_airyhq_bazel_tools//lint:fix_buildifier
 These two rules are a very shallow wrapper of buildifier, but we package them for convenience. If you are looking
 to use its extensive API you can replace this implementation with your own.
 
+### Shellcheck
+
+[Shellcheck](https://www.shellcheck.net/) gives warnings and suggestions for
+bash/sh shell scripts.
+
+Macro to check all scripts including subdirectories ending with `.sh`:
+
+```python
+load("@com_github_airyhq_bazel_tools//lint:shellcheck.bzl", "shellcheck")
+
+shellcheck()
+```
+
+Alternatively you can pass a glob of shellscript files with the `scripts` parameter.
+
 ## Web builds
 
 For web builds we use the [rules_nodejs](https://github.com/bazelbuild/rules_nodejs) repository. You have to install the 
