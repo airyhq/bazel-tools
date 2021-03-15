@@ -24,7 +24,7 @@
     "minimist": "^1.2.5",
     "node-sass": "^5.0.0",
     "path": "^0.12.7",
-    "prettier": "^1.19.1",
+    "prettier": "^2.2.1",
     "react-hot-loader": "^4.13.0",
     "shellcheck": "^1.0.0",
     "style-loader": "^2.0.0",

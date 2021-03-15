@@ -136,16 +136,21 @@ module.exports = (env, argv) => {
         'process.env.NODE_ENV': "'development'",
         'process.env.PUBLIC_PATH': `'${output.publicPath}'`,
       }),
-      new CopyWebpackPlugin([
-        {
-          from: '**/public/**/*',
-          ignore: ['**/node_modules/**'],
-          transformPath(targetPath) {
-            const splits = targetPath.split('public/');
-            return splits[1];
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: '**/public/**/*',
+            noErrorOnMissing: true,
+            globOptions: {
+              ignore: ['**/node_modules/**'],
+              transformPath(targetPath) {
+                const splits = targetPath.split('public/');
+                return splits[1];
+              },
+            }
           },
-        },
-      ]),
+        ]
+      }),
       new HtmlWebpackPlugin({
         template: '!!ejs-compiled-loader!' + path.resolve(argv.index),
         inject: true,

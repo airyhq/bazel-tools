@@ -46,8 +46,8 @@ load("@com_github_airyhq_bazel_tools//lint:prettier.bzl", "prettier")
 
 prettier(
     name = "prettier",
+    config = "//:.prettierrc.json",
     srcs = ["index.js"], # Defaults to all js,jsx,ts,tsx,scss,css files
-    config = "//:.prettierrc.json", # Defaults to lint/.prettierrc.json
     ignore = "//:.prettierignore", # Defaults to lint/.prettierignore
 )
 ```
@@ -58,10 +58,22 @@ Both rules will add a `:prettier` test target to your package, which can be run 
 bazel test //my/package:prettier
 ```
 
-To try fixing prettier issues you can run:
+To try fixing prettier issues you instantiate the `prettier_fix` rule in your root `BUILD` file:
+
+```python
+load("@com_github_airyhq_bazel_tools//lint:prettier.bzl", "fix_prettier")
+
+fix_prettier(
+    name = "fix_prettier",
+    config = "//:.prettierrc.json", # Defaults to lint/.prettierrc.json
+    ignore = "//:.prettierignore", # Defaults to lint/.prettierignore
+)
+```
+
+Run it like so:
 
 ```shell script
-bazel run @com_github_airyhq_bazel_tools//lint:fix_prettier
+bazel run //:fix_prettier
 ```
 
 ### Eslint
@@ -73,8 +85,8 @@ load("@com_github_airyhq_bazel_tools//lint:eslint.bzl", "eslint")
 
 eslint(
     name = "eslint",
+    config = "//:.eslint.json",
     srcs = ["index.ts"], # Defaults to all js,jsx,ts,tsx,scss,css files in package
-    config = "//:.eslint.json", # Defaults to lint/.eslint.json
     ignore = "//:.eslintignore", # Defaults to lint/.eslintignore
 )
 ```
@@ -230,7 +242,7 @@ web_library(
     name = "bundle",
     app_lib = ":app",
 entry = "my/web/package/src/index.js",
-    module_deps = module_deps,
+    module_deps = ["//package/lib:ts_web_lib_target"],
     output = {
         "publicPath": "/blog/"
     }

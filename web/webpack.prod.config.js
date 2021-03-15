@@ -171,16 +171,22 @@ module.exports = (env, argv) => {
                 'process.env.NODE_ENV': "'production'",
                 'process.env.PUBLIC_PATH': `'${output.publicPath}'`,
             }),
-            new CopyWebpackPlugin([
-                {
+            new CopyWebpackPlugin({
+                patterns: [
+                  {
                     from: '**/public/**/*',
-                    ignore: ['**/node_modules/**'],
-                    transformPath(targetPath) {
+                    noErrorOnMissing: true,
+                    globOptions: {
+                      ignore: ['**/node_modules/**'],
+                      transformPath(targetPath) {
                         const splits = targetPath.split('public/');
                         return splits[1];
                     },
-                },
-            ]),
+                    }
+                  }
+                ]
+              }
+            ),
             new HtmlWebpackPlugin({
                 template: '!!ejs-compiled-loader!' + path.resolve(argv.index),
                 inject: true,
