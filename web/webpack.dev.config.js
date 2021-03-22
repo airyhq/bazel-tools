@@ -153,7 +153,7 @@ module.exports = (env, argv) => {
         ]
       }),
       new HtmlWebpackPlugin({
-        template: '!!ejs-compiled-loader!' + path.resolve(argv.index),
+        template: path.resolve(argv.index),
         inject: true,
         filename: 'index.html',
       }),

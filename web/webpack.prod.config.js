@@ -19,10 +19,7 @@ function resolveTsconfigPathsToAlias({tsconfigPath, basePath}) {
     }, {});
 }
 
-module.exports = (env, argv) => {
-    console.debug('HNA:', require('child_process').execSync('/bin/bash', '-c "ls"').toString());
-    console.debug('argv', argv);
-    console.debug('ebv', env);
+module.exports = (env) => {
     const output = {
         path: path.resolve(env.path),
         publicPath: '/',
@@ -191,7 +188,7 @@ module.exports = (env, argv) => {
                 }
             ),
             new HtmlWebpackPlugin({
-                template: '!!ejs-compiled-loader!' + path.resolve(env.index),
+                template: path.resolve(env.index),
                 inject: true,
                 filename: 'index.html',
                 minify: {removeComments: true, collapseWhitespace: true},
