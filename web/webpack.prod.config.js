@@ -20,11 +20,14 @@ function resolveTsconfigPathsToAlias({tsconfigPath, basePath}) {
 }
 
 module.exports = (env, argv) => {
+    console.debug('HNA:', require('child_process').execSync('/bin/bash', '-c "ls"').toString());
+    console.debug('argv', argv);
+    console.debug('ebv', env);
     const output = {
-        path: path.resolve(argv.path),
+        path: path.resolve(env.path),
         publicPath: '/',
         filename: 'js/[name].[chunkhash:8].js',
-        ...JSON.parse(argv.outputDict || "{}")
+        ...JSON.parse(env.outputDict || "{}")
     }
 
     return ({
@@ -34,10 +37,10 @@ module.exports = (env, argv) => {
         resolve: {
             alias: {
                 ...resolveTsconfigPathsToAlias({
-                    tsconfigPath: path.resolve(argv.tsconfig),
+                    tsconfigPath: path.resolve(env.tsconfig),
                     basePath: process.cwd(),
                 }),
-                ...JSON.parse(argv.aliases || "{}")
+                ...JSON.parse(env.aliases || "{}")
             }
         },
         output,
@@ -172,29 +175,29 @@ module.exports = (env, argv) => {
                 'process.env.PUBLIC_PATH': `'${output.publicPath}'`,
             }),
             new CopyWebpackPlugin({
-                patterns: [
-                  {
-                    from: '**/public/**/*',
-                    noErrorOnMissing: true,
-                    globOptions: {
-                      ignore: ['**/node_modules/**'],
-                      transformPath(targetPath) {
-                        const splits = targetPath.split('public/');
-                        return splits[1];
-                    },
-                    }
-                  }
-                ]
-              }
+                    patterns: [
+                        {
+                            from: '**/public/**/*',
+                            noErrorOnMissing: true,
+                            globOptions: {
+                                ignore: ['**/node_modules/**'],
+                                transformPath(targetPath) {
+                                    const splits = targetPath.split('public/');
+                                    return splits[1];
+                                },
+                            }
+                        }
+                    ]
+                }
             ),
             new HtmlWebpackPlugin({
-                template: '!!ejs-compiled-loader!' + path.resolve(argv.index),
+                template: '!!ejs-compiled-loader!' + path.resolve(env.index),
                 inject: true,
                 filename: 'index.html',
                 minify: {removeComments: true, collapseWhitespace: true},
             }),
         ].concat(
-            argv.show_bundle_report === true ? [
+            env.show_bundle_report === true ? [
                 new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)({
                     analyzerMode: "static"
                 })

@@ -33,23 +33,19 @@ def web_app(
     ts_config = app_lib + "_tsconfig.json"
 
     build_args = [
-        "$(GENDIR)/" + entry,
+        "build",
+        "./$(GENDIR)/" + entry,
         "--config",
         "$(execpath " + webpack_prod_config + ")",
-        "--tsconfig",
-        "$(location " + ts_config + ")",
-        "--outputDict",
-        "'" + json.encode(output) + "'",
-        "--index",
-        "$(location " + index + ")",
-        "--path",
-        "$(@D)",
-        "--aliases",
-        json.encode(aliases),
+        "--env tsconfig=$(location " + ts_config + ")",
+        "--env outputDict=" + json.encode(output),
+        "--env index=$(location " + index + ")",
+        "--env path=$(@D)",
+        "--env aliases=" + json.encode(aliases),
     ]
 
     if show_bundle_report == True:
-        build_args.append("--show_bundle_report")
+        build_args.append("--env show_bundle_report")
 
     webpack(
         name = name,
