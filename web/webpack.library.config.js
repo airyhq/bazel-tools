@@ -18,22 +18,22 @@ function resolveTsconfigPathsToAlias({tsconfigPath, basePath}) {
 }
 
 
-module.exports = (env, argv) => ({
+module.exports = (env) => ({
     mode: 'production',
     target: 'web',
     bail: true, // stop compilation on first error
     resolve: {
         alias: {
             ...resolveTsconfigPathsToAlias({
-                tsconfigPath: path.resolve(argv.tsconfig),
+                tsconfigPath: path.resolve(env.tsconfig),
                 basePath: process.cwd(),
             }),
-            ...JSON.parse(argv.aliases || "{}")
+            ...JSON.parse(env.aliases || "{}")
         }
     },
     output: {
-        path: path.resolve(argv.path),
-        ...JSON.parse(argv.outputDict || "{}")
+        path: path.resolve(env.path),
+        ...JSON.parse(env.outputDict || "{}")
     },
 
     optimization: {
@@ -44,7 +44,7 @@ module.exports = (env, argv) => ({
     devtool: 'none',
 
     externals: {
-        ...JSON.parse(argv.externalDict || "{}"),
+        ...JSON.parse(env.externalDict || "{}"),
     },
 
     module: {
@@ -130,7 +130,7 @@ module.exports = (env, argv) => ({
             'process.env.NODE_ENV': "'production'",
         }),
     ].concat(
-        argv.show_bundle_report === true ? [
+        env.show_bundle_report === true ? [
             new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)({
                 analyzerMode: "static"
             })

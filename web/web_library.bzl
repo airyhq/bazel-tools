@@ -26,33 +26,29 @@ def web_library(
     ts_config = app_lib + "_tsconfig.json"
 
     args = [
-        "$(GENDIR)/" + entry,
+        "build",
+        "./$(GENDIR)/" + entry,
         "--config",
         "$(execpath " + webpack_config + ")",
-        "--tsconfig",
-        "$(location " + ts_config + ")",
-        "--outputDict",
-        "'" + json.encode(output) + "'",
-        "--externalDict",
-        "'" + json.encode(externals) + "'",
-        "--path",
-        "$(@D)",
-        "--aliases",
-        "'" + json.encode(aliases) + "'",
+        "--env tsconfig=$(location " + ts_config + ")",
+        "--env outputDict=" + json.encode(output),
+        "--env externalDict=" + json.encode(externals),
+        "--env path=$(@D)",
+        "--env aliases=" + json.encode(aliases),
     ]
 
     if show_bundle_report == True:
-        args.append("--show_bundle_report")
+        args.append("--env show_bundle_report")
 
     webpack(
         name = name,
         output_dir = True,
         args = args,
         data = [
-                   ":" + ts_transpiled_sources,
-                   webpack_config,
-                   ts_config,
-                   "@npm//:node_modules",
-               ] +
-               ts_srcs_assets,
+           ":" + ts_transpiled_sources,
+           webpack_config,
+           ts_config,
+           "@npm//:node_modules",
+        ] +
+        ts_srcs_assets,
     )
