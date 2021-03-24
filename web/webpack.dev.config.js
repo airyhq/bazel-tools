@@ -47,7 +47,7 @@ module.exports = (env, argv) => {
       }),
     },
 
-    devtool: 'cheap-module-eval-source-map',
+    devtool: 'eval',
 
     module: {
       rules: [
@@ -133,7 +133,7 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': "'development'",
+        'process.env.NODE_ENV': `"development"`,
         'process.env.PUBLIC_PATH': `'${output.publicPath}'`,
         ...JSON.parse(argv.defines || "{}"),
       }),
@@ -157,7 +157,6 @@ module.exports = (env, argv) => {
         inject: true,
         filename: 'index.html',
       }),
-      new webpack.optimize.OccurrenceOrderPlugin(),
       new webpack.HotModuleReplacementPlugin(),
     ],
   });
