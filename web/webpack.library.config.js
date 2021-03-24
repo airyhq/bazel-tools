@@ -41,8 +41,6 @@ module.exports = (env) => ({
         minimizer: [new TerserPlugin()],
     },
 
-    devtool: 'none',
-
     externals: {
         ...JSON.parse(env.externalDict || "{}"),
     },
@@ -127,7 +125,7 @@ module.exports = (env) => ({
     },
     plugins: [
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': "'production'",
+            'process.env.NODE_ENV': `"production"`,
         }),
     ].concat(
         env.show_bundle_report === true ? [

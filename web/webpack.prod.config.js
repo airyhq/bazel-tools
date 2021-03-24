@@ -51,7 +51,10 @@ module.exports = (env) => {
             ],
         },
 
-        devtool: 'source-map',
+        stats: {
+            children: true,
+            errorDetails: true,
+        },
 
         module: {
             rules: [
@@ -168,7 +171,7 @@ module.exports = (env) => {
         },
         plugins: [
             new webpack.DefinePlugin({
-                'process.env.NODE_ENV': "'production'",
+                'process.env.NODE_ENV': `"production"`,
                 'process.env.PUBLIC_PATH': `'${output.publicPath}'`,
             }),
             new CopyWebpackPlugin({
