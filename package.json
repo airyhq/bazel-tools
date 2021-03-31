@@ -27,7 +27,7 @@
     "react-hot-loader": "^4.13.0",
     "shellcheck": "^1.0.0",
     "style-loader": "^2.0.0",
-    "terser-webpack-plugin": "^5.0.3",
+    "terser-webpack-plugin": "^5.1.1",
     "typescript": "^4.2.2",
     "url-loader": "^4.1.1",
     "webpack": "^5.28.0",

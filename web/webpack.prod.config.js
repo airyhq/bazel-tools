@@ -29,6 +29,7 @@ module.exports = (env) => {
 
     return ({
         mode: 'production',
+        devtool: "source-map",
         target: 'web',
         bail: true, // stop compilation on first error
         resolve: {
@@ -45,9 +46,7 @@ module.exports = (env) => {
         optimization: {
             minimize: true,
             minimizer: [
-                new TerserPlugin({
-                    sourceMap: true,
-                }),
+                new TerserPlugin(),
             ],
         },
 
