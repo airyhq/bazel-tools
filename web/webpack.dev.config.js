@@ -1,10 +1,10 @@
 const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require("html-webpack-plugin")
-// For dev the tsconfig-paths-webpack-plugin doesn't cut it, as it links to file locations
-// that are only available to build rules
+const cwdRequire = id => require(require.resolve(id, { paths: [process.cwd()] }));
+
+const webpack = cwdRequire('webpack');
+const HtmlWebpackPlugin = cwdRequire("html-webpack-plugin")
+
 function resolveTsconfigPathsToAlias({tsconfigPath, basePath}) {
-    console.debug('tsconfigPath', tsconfigPath);
     const {paths} = require(tsconfigPath).compilerOptions;
 
     const stripGlobs = path => path.replace('/*', '');
@@ -23,10 +23,13 @@ function resolveTsconfigPathsToAlias({tsconfigPath, basePath}) {
 module.exports = (env, argv) => {
     const output = {
         publicPath: '/',
-        //...JSON.parse(argv.outputDict || "{}"),
+        filename: 'js/[name].[chunkhash:8].js',
+        ...JSON.parse(argv.outputDict || "{}"),
     };
 
     return {
+        context: env.BUILD_WORKSPACE_DIRECTORY,
+
         mode: 'development',
         target: 'web',
         bail: false,
