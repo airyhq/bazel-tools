@@ -10,7 +10,7 @@ const webpackDevServer = require('webpack-dev-server');
 const webpack = require('webpack');
 
 const options = {
-  // TODO
+  // TODO If we ever want to serve static assets for the devserver
   contentBase: false,
   hot: true,
   host: 'localhost',

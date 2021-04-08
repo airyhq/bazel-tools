@@ -80,5 +80,5 @@ def web_app(
             dev_index,
             dev_tsconfig,
             "@npm//:node_modules",
-        ] + static_assets
+        ] + static_assets,
     )
