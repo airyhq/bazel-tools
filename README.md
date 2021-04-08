@@ -185,18 +185,17 @@ ts_web_library(
 - `srcs`    (optional) Your components source files. By default we glob all `.ts` and `.tsx` files.
 - `deps`    (optional) Node module dependencies required to compile the library.
 - `data`    (optional) Files needed as imports to your typescript files. By default we glob typical web file extensions.
-- `tsconfig`    (optional) It's possible to extend tsconfigs. Give it a try, if
-            it fits your use case (https://www.npmjs.com/package/@bazel/typescript#ts_config)
+- `tsconfig`    (optional) It's possible to extend tsconfigs (https://www.npmjs.com/package/@bazel/typescript#ts_config)
 - `lint_rule`    (optional) by default this is set to [check_pkg()](#prettier). Setting this flag to None, will
 disable linting for this package.
 
 ### `web_app`
 
-Bundles your web resources using `webpack`. Adds an additional target `bundle_server` that you can use for 
-running a webpack server with hot code reloading. For this to work you need to install [ibazel](https://github.com/bazelbuild/bazel-watcher):
+Bundles your web resources using `webpack`. This adds an additional target `bundle_server` that you can use for 
+running a webpack server with hot code reloading.
 
 ```shell script
-ibazel run //my/web/package:bundle_server
+bazel run //my/web/package:bundle_server
 ```
 
 ```python
@@ -209,6 +208,7 @@ web_app(
     entry = "my/web/package/src/index.js",
     index = ":index.html",
     dev_index = ":dev_index.html",
+    dev_tsconfig = "//:tsconfig.json",
     output = {
         "publicPath": "/blog/"
     },
@@ -226,6 +226,7 @@ web_app(
                   Files need to be in a folder called 'public'.
 - `entry`   Relative path to your compiled index.js
 - `index`   index.html file used for the build
+- `dev_tsconfig`  (optional) Defaults to `tsconfig.json`, which has to include a mapping of modules to paths using `compilerOptions.paths`.
 - `output`  (optional) Dictionary that gets applied to the webpack output https://webpack.js.org/configuration/output/
 - `aliases` (optional) applied to webpack [alias](https://webpack.js.org/configuration/resolve/#resolvealias)
 - `show_bundle_report`  If set to true generates a static bundle size report

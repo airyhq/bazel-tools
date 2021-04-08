@@ -7,6 +7,7 @@ def web_app(
         app_lib,
         entry,
         index,
+        dev_tsconfig = None,
         output = {},
         static_assets = None,
         module_deps = [],
@@ -61,30 +62,23 @@ def web_app(
     )
 
     dev_index = index if not dev_index else dev_index
+    dev_tsconfig = dev_tsconfig if dev_tsconfig else "//:tsconfig.json"
 
     nodejs_binary(
         name = name + "_server",
         entry_point = "@com_github_airyhq_bazel_tools//web:runWebpackDevServer.js",
-        args = [
-            "--entry",
-            entry,
-            "--config",
-            "$(execpath " + webpack_dev_config + ")",
-            "--tsconfig",
-            "$(location " + ts_config + ")",
-            "--outputDict",
-            "'" + json.encode(output) + "'",
-            "--index",
-            "$(location " + dev_index + ")",
+        templated_args = [
+            "--entry=" + entry,
+            "--config=$$(rlocation $(rootpath " + webpack_dev_config + "))",
+            "--tsconfig=$$(rlocation $(rootpath " + dev_tsconfig + "))",
+            "--outputDict='" + json.encode(output) + "'",
+            "--aliases='" + json.encode(aliases) + "'",
+            "--index=$$(rlocation $(rootpath " + dev_index + "))",
         ],
         data = [
-            ts_transpiled_sources,
             webpack_dev_config,
             dev_index,
-            ts_config,
+            dev_tsconfig,
             "@npm//:node_modules",
-        ] + ts_srcs_assets + static_assets,
-        tags = [
-            "ibazel_notify_changes",
-        ],
+        ] + static_assets
     )
