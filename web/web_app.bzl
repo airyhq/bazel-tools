@@ -68,7 +68,7 @@ def web_app(
         name = name + "_server",
         entry_point = "@com_github_airyhq_bazel_tools//web:runWebpackDevServer.js",
         templated_args = [
-            "--node_options=--require=$$(rlocation $(rootpath @com_github_airyhq_bazel_tools//lint:chdir.js))",
+            "--node_options=--require=$$(rlocation $(rootpath @com_github_airyhq_bazel_tools//util:chdir.js))",
             "--entry=" + entry,
             "--config=$$(rlocation $(rootpath " + webpack_dev_config + "))",
             "--tsconfig=$$(rlocation $(rootpath " + dev_tsconfig + "))",
@@ -80,6 +80,7 @@ def web_app(
             webpack_dev_config,
             dev_index,
             dev_tsconfig,
+            "@com_github_airyhq_bazel_tools//util:chdir.js",
             "@npm//:node_modules",
         ] + static_assets,
     )

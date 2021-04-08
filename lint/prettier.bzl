@@ -8,7 +8,7 @@ def fix_prettier(
         name = name,
         rule = nodejs_binary,
         args = [
-            "--node_options=--require=$$(rlocation $(rootpath @com_github_airyhq_bazel_tools//lint:chdir.js))",
+            "--node_options=--require=$$(rlocation $(rootpath @com_github_airyhq_bazel_tools//util:chdir.js))",
             "'./**/*.{css,scss,ts,tsx,js,jsx,md}'",
             "--write",
         ],
@@ -51,7 +51,7 @@ def _prettier_impl(
     ]
 
     data = [
-        "@com_github_airyhq_bazel_tools//lint:chdir.js",
+        "@com_github_airyhq_bazel_tools//util:chdir.js",
         ignore,
         "@npm//prettier",
     ]
