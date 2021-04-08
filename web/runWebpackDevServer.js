@@ -1,6 +1,3 @@
-// Run from the workspace root
-process.chdir(process.env.BUILD_WORKSPACE_DIRECTORY);
-
 const path = require('path');
 const argv = require('minimist')(process.argv.slice(2));
 const configGenerator = require(path.resolve(argv.config));
