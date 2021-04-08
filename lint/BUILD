@@ -10,7 +10,6 @@ exports_files([
     ".prettierrc.json",
     ".eslintrc",
     ".eslintignore",
-    "chdir.js",
     "constants.bzl",
     "checkstyle.xml",
     "shellcheck.sh",
