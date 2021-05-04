@@ -15,7 +15,9 @@ def web_app(
         dev_index = None,
         webpack_prod_config = None,
         webpack_dev_config = None,
-        show_bundle_report = False):
+        show_bundle_report = False,
+        **kwargs
+        ):
     static_assets = [static_assets] if static_assets else []
     ts_transpiled_sources = name + "_ts_transpiled"
 
@@ -59,6 +61,7 @@ def web_app(
             ts_config,
             "@npm//:node_modules",
         ] + ts_srcs_assets + static_assets,
+        **kwargs
     )
 
     dev_index = index if not dev_index else dev_index

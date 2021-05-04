@@ -9,7 +9,8 @@ def web_library(
         aliases = {},
         externals = {},
         show_bundle_report = False,
-        module_deps = []):
+        module_deps = [],
+        **kwargs):
     ts_transpiled_sources = name + "_ts_transpiled"
 
     ts_srcs = [app_lib] + module_deps
@@ -45,10 +46,11 @@ def web_library(
         output_dir = True,
         args = args,
         data = [
-                   ":" + ts_transpiled_sources,
-                   webpack_config,
-                   ts_config,
-                   "@npm//:node_modules",
-               ] +
-               ts_srcs_assets,
+           ":" + ts_transpiled_sources,
+           webpack_config,
+           ts_config,
+           "@npm//:node_modules",
+       ] +
+       ts_srcs_assets,
+       **kwargs
     )
