@@ -9,12 +9,10 @@ const webpackDevServer = require('webpack-dev-server');
 const webpack = require('webpack');
 
 const publicPath = JSON.parse(argv.outputDict || "{}").publicPath || '/';
-
 const options = {
     // TODO If we ever want to serve static assets for the devserver
     contentBase: false,
     hot: true,
-    host: 'localhost',
     historyApiFallback: {
         rewrites: [
             {
@@ -25,6 +23,10 @@ const options = {
     },
     publicPath
 };
+
+if (argv.public) {
+    options.public = argv.public
+}
 
 webpackDevServer.addDevServerEntrypoints(config, options);
 const compiler = webpack(config);
