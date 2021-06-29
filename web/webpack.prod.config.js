@@ -177,13 +177,10 @@ module.exports = (env) => {
                     patterns: [
                         {
                             from: '**/public/**/*',
+                            to: "[name][ext]",
                             noErrorOnMissing: true,
                             globOptions: {
                                 ignore: ['**/node_modules/**'],
-                                transformPath(targetPath) {
-                                    const splits = targetPath.split('public/');
-                                    return splits[1];
-                                },
                             }
                         }
                     ]

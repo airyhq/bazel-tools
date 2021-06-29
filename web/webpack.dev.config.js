@@ -2,7 +2,8 @@ const path = require('path');
 const cwdRequire = id => require(require.resolve(id, { paths: [process.cwd()] }));
 
 const webpack = cwdRequire('webpack');
-const HtmlWebpackPlugin = cwdRequire("html-webpack-plugin")
+const HtmlWebpackPlugin = cwdRequire("html-webpack-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 function resolveTsconfigPathsToAlias({tsconfigPath, basePath}) {
     const {paths} = require(tsconfigPath).compilerOptions;
@@ -150,6 +151,19 @@ module.exports = (env, argv) => {
                 'process.env.PUBLIC_PATH': `'${output.publicPath}'`,
                 ...JSON.parse(argv.defines || '{}'),
             }),
+            new CopyWebpackPlugin({
+                    patterns: [
+                        {
+                            from: '**/public/**/*',
+                            to: "[name][ext]",
+                            noErrorOnMissing: true,
+                            globOptions: {
+                                ignore: ['**/node_modules/**'],
+                            }
+                        }
+                    ]
+                }
+            ),
             new HtmlWebpackPlugin({
                 template: argv.index,
                 inject: true,
