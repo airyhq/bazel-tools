@@ -3,7 +3,7 @@ const cwdRequire = id => require(require.resolve(id, { paths: [process.cwd()] })
 
 const webpack = cwdRequire('webpack');
 const HtmlWebpackPlugin = cwdRequire("html-webpack-plugin");
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CopyWebpackPlugin = cwdRequire('copy-webpack-plugin');
 
 function resolveTsconfigPathsToAlias({tsconfigPath, basePath}) {
     const {paths} = require(tsconfigPath).compilerOptions;
