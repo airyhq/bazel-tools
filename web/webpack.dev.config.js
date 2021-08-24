@@ -52,6 +52,9 @@ module.exports = (env, argv) => {
                 ...JSON.parse(argv.aliases || "{}")
             },
             extensions: ['.tsx', '.ts', '.js'],
+            fallback: {
+                "assert": false
+            }
         },
 
         devtool: 'eval-cheap-module-source-map',

@@ -77,25 +77,6 @@ module.exports = (env) => {
                     },
                 },
                 {
-                    test: /\.(mjs|js)$/,
-                    exclude: /node_modules/,
-                    loader: 'babel-loader',
-                    options: {
-                        cacheDirectory: true,
-                        presets: [
-                            [
-                                '@babel/preset-env',
-                                {
-                                    useBuiltIns: 'entry',
-                                    corejs: 3,
-                                    modules: false,
-                                    targets: ['>0.2%', 'not dead', 'not op_mini all'],
-                                },
-                            ],
-                        ],
-                    },
-                },
-                {
                     test: /\.module\.scss$/,
                     use: [
                         'style-loader',
