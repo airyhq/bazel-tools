@@ -11,8 +11,9 @@ const webpack = require('webpack');
 const publicPath = JSON.parse(argv.outputDict || "{}").publicPath || '/';
 const options = {
     // TODO If we ever want to serve static assets for the devserver
-    contentBase: false,
     hot: true,
+    contentBase: false,
+    publicPath,
     historyApiFallback: {
         rewrites: [
             {
@@ -20,8 +21,7 @@ const options = {
                 to: config.output.publicPath + "index.html",
             }
         ],
-    },
-    publicPath
+    }
 };
 
 if (argv.public) {
