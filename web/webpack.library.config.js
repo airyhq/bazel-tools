@@ -52,15 +52,7 @@ module.exports = (env) => ({
                 exclude: /node_modules/,
                 loader: 'babel-loader',
                 options: {
-                    cacheDirectory: false,
-                    presets: [
-                        [
-                            '@babel/preset-env',
-                            {
-                                modules: 'auto',
-                            },
-                        ],
-                    ],
+                    cacheDirectory: false
                 },
             },
             {
@@ -78,10 +70,6 @@ module.exports = (env) => ({
                     },
                     'sass-loader',
                 ],
-            },
-            {
-                test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2)(\?.*)?$/,
-                loader: 'url-loader',
             },
             {
                 test: /\.svg$/,
