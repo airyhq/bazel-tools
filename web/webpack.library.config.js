@@ -72,6 +72,10 @@ module.exports = (env) => ({
                 ],
             },
             {
+                test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2)(\?.*)?$/,
+                loader: 'url-loader',
+            },
+            {
                 test: /\.svg$/,
                 use: [
                     {
