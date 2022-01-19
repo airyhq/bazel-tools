@@ -113,24 +113,15 @@ module.exports = (env) => {
                     },
                 },
                 {
-                    test: /\.svg$/,
+                    test: /\.svg$/i,
+                    issuer: /\.[jt]sx?$/,
                     use: [
                         {
                             loader: '@svgr/webpack',
                             options: {
                                 titleProp: true,
-                                svgoConfig: {
-                                    plugins: {
-                                        removeViewBox: false,
-                                    },
-                                },
-                                template: ({template}, opts, {imports, interfaces, componentName, props, jsx, exports}) => {
-                                    const plugins = ['jsx'];
-                                    if (opts.typescript) {
-                                        plugins.push('typescript');
-                                    }
-                                    const typeScriptTpl = template.smart({plugins});
-                                    return typeScriptTpl.ast`
+                                template: ({imports, interfaces, componentName, props, jsx, exports}, {tpl}) => {
+                                    return tpl`
                                           ${imports}
                                           ${interfaces}
                                           function ${componentName}(${props}) {
@@ -141,12 +132,9 @@ module.exports = (env) => {
                                           `;
                                 },
                             },
-                        },
-                        // Use url-loader to be able to inject into img src
-                        // https://www.npmjs.com/package/@svgr/webpack#using-with-url-loader-or-file-loader
-                        'url-loader',
-                    ],
-                },
+                        }, 'url-loader'
+                    ]
+                }
             ],
         },
         plugins: [
