@@ -118,26 +118,16 @@ module.exports = (env, argv) => {
                             loader: '@svgr/webpack',
                             options: {
                                 titleProp: true,
-                                svgoConfig: {
-                                    plugins: {
-                                        removeViewBox: false,
-                                    },
-                                },
-                                template: ({template}, opts, {imports, interfaces, componentName, props, jsx, exports}) => {
-                                    const plugins = ['jsx'];
-                                    if (opts.typescript) {
-                                        plugins.push('typescript');
-                                    }
-                                    const typeScriptTpl = template.smart({plugins});
-                                    return typeScriptTpl.ast`
-                                      ${imports}
-                                      ${interfaces}
-                                      function ${componentName}(${props}) {
-                                        props = { title: '', ...props };
-                                        return ${jsx};
-                                      }
-                                      ${exports}
-                                      `;
+                                template: ({imports, interfaces, componentName, props, jsx, exports}, {tpl}) => {
+                                    return tpl`
+                                          ${imports}
+                                          ${interfaces}
+                                          function ${componentName}(${props}) {
+                                            props = { title: '', ...props };
+                                            return ${jsx};
+                                          }
+                                          ${exports}
+                                          `;
                                 },
                             },
                         },
