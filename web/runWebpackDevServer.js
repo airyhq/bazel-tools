@@ -29,10 +29,11 @@ if (argv.public) {
 }
 
 const compiler = webpack(config);
-const server = new webpackDevServer(compiler, options);
+const server = new webpackDevServer(options, compiler);
 
 const port = process.env.PORT || 8080;
 
-server.listen(port, 'localhost', () => {
-    console.log(`dev server listening on port ${port}`);
-});
+(async () => {
+  await server.start();
+  console.log(`dev server is listening on port ${port}`);
+})();
