@@ -5,12 +5,12 @@ const argv = require('minimist')(process.argv.slice(2));
 const configGenerator = require(path.resolve(argv.config));
 
 const config = configGenerator(process.env, argv);
-const webpackDevServer = require('webpack-dev-server');
+const WebpackDevServer = require('webpack-dev-server');
 const webpack = require('webpack');
 
 const publicPath = JSON.parse(argv.outputDict || "{}").publicPath || '/';
 const options = {
-    hot: "only",
+    hot: true,
     static: {
         publicPath,
     },
@@ -29,7 +29,7 @@ if (argv.public) {
 }
 
 const compiler = webpack(config);
-const server = new webpackDevServer(options, compiler);
+const server = new WebpackDevServer(options, compiler);
 
 const port = process.env.PORT || 8080;
 

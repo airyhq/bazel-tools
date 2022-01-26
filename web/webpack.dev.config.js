@@ -49,7 +49,8 @@ module.exports = (env, argv) => {
                     tsconfigPath: path.resolve(argv.tsconfig),
                     basePath: process.cwd(),
                 }),
-                ...JSON.parse(argv.aliases || "{}")
+                ...JSON.parse(argv.aliases || "{}"),
+                'react-dom': '@hot-loader/react-dom'
             },
             extensions: ['.tsx', '.ts', '.js'],
             fallback: {
