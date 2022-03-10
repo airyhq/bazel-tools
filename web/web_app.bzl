@@ -16,8 +16,7 @@ def web_app(
         webpack_prod_config = None,
         webpack_dev_config = None,
         show_bundle_report = False,
-        **kwargs
-        ):
+        **kwargs):
     static_assets = [static_assets] if static_assets else []
     ts_transpiled_sources = name + "_ts_transpiled"
 

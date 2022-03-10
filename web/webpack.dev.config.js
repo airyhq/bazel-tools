@@ -1,4 +1,5 @@
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
 const cwdRequire = id => require(require.resolve(id, { paths: [process.cwd()] }));
 
 const webpack = cwdRequire('webpack');
@@ -163,6 +164,7 @@ module.exports = (env, argv) => {
                 inject: true,
                 filename: 'index.html',
             }),
+            new Dotenv()
         ],
     };
 };

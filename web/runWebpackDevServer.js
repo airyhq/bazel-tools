@@ -9,11 +9,13 @@ const WebpackDevServer = require('webpack-dev-server');
 const webpack = require('webpack');
 
 const publicPath = JSON.parse(argv.outputDict || "{}").publicPath || '/';
+
 const options = {
     hot: true,
     static: {
         publicPath,
     },
+    host: argv.host || 'localhost',
     historyApiFallback: {
         rewrites: [
             {
