@@ -1,8 +1,8 @@
 const path = require('path');
-const Dotenv = require('dotenv-webpack');
 const cwdRequire = id => require(require.resolve(id, { paths: [process.cwd()] }));
 
 const webpack = cwdRequire('webpack');
+const Dotenv = cwdRequire('dotenv-webpack');
 const HtmlWebpackPlugin = cwdRequire("html-webpack-plugin");
 const CopyWebpackPlugin = cwdRequire('copy-webpack-plugin');
 
