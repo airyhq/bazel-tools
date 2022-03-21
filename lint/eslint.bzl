@@ -18,7 +18,7 @@ def eslint(
             "@npm//@typescript-eslint/eslint-plugin",
             "@npm//@typescript-eslint/parser",
         ] + srcs,
-        entry_point = "@npm//:node_modules/eslint/bin/eslint.js",
+        entry_point = {"@npm//:node_modules/eslint": "bin/eslint.js"},
         templated_args = [
             "--config $(rootpath " + config + ")",
             "--ignore-path $(rootpath " + ignore + ")",

@@ -34,6 +34,10 @@ load("@maven//:defs.bzl", "pinned_maven_install")
 pinned_maven_install()
 
 # Javascript
+load("@build_bazel_rules_nodejs//:repositories.bzl", "build_bazel_rules_nodejs_dependencies")
+
+build_bazel_rules_nodejs_dependencies()
+
 load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
 
 node_repositories()

@@ -1,5 +1,8 @@
 load("@com_github_airyhq_bazel_tools//web:files.bzl", "copy_filegroups")
-load("@npm//@bazel/typescript:index.bzl", "ts_library")
+load("@npm//@bazel/typescript:index.bzl", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+
 
 """
 Usage
@@ -27,18 +30,45 @@ tsconfig -  (optional) It's possible to extend tsconfigs! Give it a try, if
 
 ASSETS_SUFFIX = "_assets"
 
-def ts_web_library(name, srcs = None, deps = None, data = None, tsconfig = None):
+def ts_web_library(name, srcs = None, deps = None, data = None, tsconfig = None, **kwargs):
     tsconfig = "//:tsconfig.json" if not tsconfig else tsconfig
     deps = [] if not deps else deps
-    srcs = native.glob(["**/*.tsx", "**/*.ts"]) if not srcs else srcs
+    srcs = native.glob(["**/*.json", "**/*.ts", "**/*.tsx"]) if not srcs else srcs
 
+    add_assets(name, data)
+
+    ts_project(
+        name = name + "_ts_project",
+        srcs = srcs,
+        tsconfig = tsconfig,
+        deps = deps,
+        source_map = True,
+        validate = False,
+        resolve_json_module = True,
+        declaration = True,
+        **kwargs,
+    )
+
+    # Create placeholder package.json to import by module name
+    write_file(
+        name = name + "_package.json",
+        out = "package.json",
+        content = ['{"name": "' + name + '","version":"0.0.0"}'],
+    )
+
+    js_library(
+        name = name,
+        package_name = name,
+        srcs = [name + "_package.json"],
+        deps = [name + "_ts_project"],
+    )
+
+def add_assets(name, data):
     default_data_glob = native.glob([
         "**/*.scss",
         "**/*.css",
-        "**/*.json",
         "**/*.png",
         "**/*.svg",
-        "**/*.json",
     ])
 
     data = default_data_glob if not data else data
@@ -55,17 +85,17 @@ def ts_web_library(name, srcs = None, deps = None, data = None, tsconfig = None)
         ],
     )
 
-    ts_library(
+
+def ts_declaration_import(name, srcs = None, **kwargs):
+    srcs = native.glob(["**/*.d.ts"]) if not srcs else srcs
+
+    add_assets(name, data = [])
+    js_library(
         name = name,
-        module_name = name,
         srcs = srcs,
-        devmode_module = "esnext",
-        devmode_target = "esnext",
-        prodmode_module = "esnext",
-        prodmode_target = "esnext",
-        tsconfig = tsconfig,
-        deps = deps,
+        **kwargs,
     )
+
 
 # Helper function to get asset target from a ts_web_library target
 def get_assets_label(lib):

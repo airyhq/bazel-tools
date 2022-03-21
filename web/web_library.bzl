@@ -3,28 +3,20 @@ load("@npm//webpack-cli:index.bzl", webpack = "webpack_cli")
 
 def web_library(
         name,
-        app_lib,
+        ts_deps,
         entry,
         output,
         aliases = {},
         externals = {},
         show_bundle_report = False,
-        module_deps = [],
         **kwargs):
     ts_transpiled_sources = name + "_ts_transpiled"
 
-    ts_srcs = [app_lib] + module_deps
-    ts_srcs_assets = [get_assets_label(src) for src in ts_srcs]
-
-    native.filegroup(
-        name = ts_transpiled_sources,
-        srcs = ts_srcs,
-        output_group = "es5_sources",
-    )
+    ts_srcs_assets = [get_assets_label(src) for src in ts_deps]
 
     webpack_config = "@com_github_airyhq_bazel_tools//web:webpack.library.config.js"
 
-    ts_config = app_lib + "_tsconfig.json"
+    ts_config = "//:tsconfig.json"
 
     args = [
         "build",
@@ -32,6 +24,7 @@ def web_library(
         "--config",
         "$(execpath " + webpack_config + ")",
         "--env tsconfig=$(location " + ts_config + ")",
+        "--env genDir=$(GENDIR)",
         "--env outputDict=" + json.encode(output),
         "--env externalDict=" + json.encode(externals),
         "--env path=$(@D)",
@@ -46,11 +39,9 @@ def web_library(
         output_dir = True,
         args = args,
         data = [
-           ":" + ts_transpiled_sources,
            webpack_config,
            ts_config,
            "@npm//:node_modules",
-       ] +
-       ts_srcs_assets,
+       ] + ts_deps + ts_srcs_assets,
        **kwargs
     )

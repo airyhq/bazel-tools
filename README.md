@@ -160,7 +160,7 @@ development dependencies listed in the [`package.json`](./package.json) to use t
 
 ### `ts_web_library`
 
-This is a thin wrapper around the `ts_library` provided by `rules_nodejs`. It also aggregates asset dependencies so
+This is a thin wrapper around the `ts_project` provided by `rules_nodejs`. It also aggregates asset dependencies so
 that they are available to downstream bundling. 
 
 ```python
@@ -191,7 +191,7 @@ disable linting for this package.
 
 ### `web_app`
 
-Bundles your web resources using `webpack`. This adds an additional target `bundle_server` that you can use for 
+Bundles your web resources using `webpack` and adds a target `*_server` that you can use for 
 running a webpack server with hot code reloading.
 
 ```shell script
@@ -221,7 +221,6 @@ web_app(
 **Parameters:**
 
 - `name`    Unique name of the build rule. The dev server rule will be called `name_server`
-- `app_lib` Label of the app `ts_web_library`
 - `static_assets`   (optional) Filegroup (list of files) that should be copied "as is" to the webroot.
                   Files need to be in a folder called 'public'.
 - `entry`   Relative path to your compiled index.js

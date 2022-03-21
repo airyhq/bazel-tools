@@ -63,7 +63,7 @@ def _prettier_impl(
     rule(
         name = name,
         data = data + srcs,
-        entry_point = "@npm//:node_modules/prettier/bin-prettier.js",
+        entry_point = {"@npm//:node_modules/prettier": "bin-prettier.js"},
         templated_args = cmd_args,
         tags = ["lint"],
     )

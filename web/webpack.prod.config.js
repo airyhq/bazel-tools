@@ -7,10 +7,9 @@ const TerserPlugin = require('terser-webpack-plugin');
 function resolveTsconfigPathsToAlias({tsconfigPath, basePath}) {
     const {paths} = require(tsconfigPath).compilerOptions;
     const stripGlobs = path => path.replace('/*', '');
-
     return Object.keys(paths).reduce((aliases, moduleMappingKey) => {
         const key = stripGlobs(moduleMappingKey);
-        const value = path.resolve(basePath, stripGlobs(paths[moduleMappingKey][1]).replace('*', ''));
+        const value = path.resolve(basePath, stripGlobs(paths[moduleMappingKey][0]).replace('*', ''));
 
         return {
             ...aliases,
@@ -36,7 +35,7 @@ module.exports = (env) => {
             alias: {
                 ...resolveTsconfigPathsToAlias({
                     tsconfigPath: path.resolve(env.tsconfig),
-                    basePath: process.cwd(),
+                    basePath: path.resolve(process.cwd(), env.genDir),
                 }),
                 ...JSON.parse(env.aliases || "{}")
             }
