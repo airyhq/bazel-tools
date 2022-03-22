@@ -308,6 +308,14 @@ junit5(
 
 For more options see the Bazel `java_test` [rule](https://docs.bazel.build/versions/master/be/java.html#java_test) 
 
+## Aspects
+
+We provide a simple [aspect](https://docs.bazel.build/versions/main/skylark/aspects.html) that helps discover the output groups of a target. 
+It can be used like so:
+
+```shell
+bazel build --nobuild //path/to:target  --aspects=@com_github_airyhq_bazel_tools//aspects:outputs.bzl%output_group_query_aspect
+```
 
 ## How to contribute
 

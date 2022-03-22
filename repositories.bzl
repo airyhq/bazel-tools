@@ -2,8 +2,8 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 def airy_bazel_tools_dependencies():
-    RULES_JVM_EXTERNAL_TAG = "3.3"
-    RULES_JVM_EXTERNAL_SHA = "d85951a92c0908c80bd8551002d66cb23c3434409c814179c0ff026b53544dab"
+    RULES_JVM_EXTERNAL_TAG = "4.2"
+    RULES_JVM_EXTERNAL_SHA = "cd1a77b7b02e8e008439ca76fd34f5b07aecb8c752961f9640dea15e9e5ba1ca"
 
     _maybe_add(
         http_archive,
@@ -61,6 +61,7 @@ def _maybe_add(repo_rule, name, **kwargs):
         repo_rule(name = name, **kwargs)
 
 airy_jvm_deps = [
-    "com.puppycrawl.tools:checkstyle:8.37",
-    "org.junit.platform:junit-platform-console:1.7.0",
+    "com.puppycrawl.tools:checkstyle:10.0",
+    "org.junit.platform:junit-platform-console:1.8.2",
+    "org.junit.platform:junit-platform-engine:1.8.2",
 ]
