@@ -16,8 +16,8 @@ def airy_bazel_tools_dependencies():
     _maybe_add(
         http_archive,
         name = "build_bazel_rules_nodejs",
-        sha256 = "965ee2492a2b087cf9e0f2ca472aeaf1be2eb650e0cfbddf514b9a7d3ea4b02a",
-        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.2.0/rules_nodejs-5.2.0.tar.gz"],
+        sha256 = "523da2d6b50bc00eaf14b00ed28b1a366b3ab456e14131e9812558b26599125c",
+        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/5.3.1/rules_nodejs-5.3.1.tar.gz"],
     )
 
     _maybe_add(
