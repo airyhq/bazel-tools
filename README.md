@@ -308,6 +308,87 @@ junit5(
 
 For more options see the Bazel `java_test` [rule](https://docs.bazel.build/versions/master/be/java.html#java_test) 
 
+## Helm
+
+Currently the helm rule set supports: downloading the helm binary as a repository rule, `helm template` in a form of test rule and `helm push` to a Chartmuseum helm repository.
+
+For downloading the helm binary, add this to your WORKSPACES file:
+
+```python
+load("@com_github_airyhq_bazel_tools//helm:helm.bzl", "helm_tool")
+
+helm_tool(
+    name = "helm_binary",
+)
+```
+
+The chart needs to be packaged before it can be processed by Bazel. To do that, add this to your BUILD file in the directory where the `Chart.yaml` file resides:
+
+```python
+load("@rules_pkg//:pkg.bzl", "pkg_tar")
+
+filegroup(
+    name = "files",
+    srcs = glob([
+        "**/*.yaml",
+        "**/*.tpl",
+    ]),
+)
+
+pkg_tar(
+    name = "package",
+    srcs = [":files"],
+    extension = "tgz",
+    strip_prefix = "./",
+)
+```
+
+For running a test with `helm template`, add this to your BUILD file, in the same directory:
+
+
+```python
+load("@com_github_airyhq_bazel_tools//helm:helm.bzl", "helm_template_test")
+
+helm_template_test(
+    name = "template",
+    chart = ":package",
+)
+```
+
+Then run:
+
+```shell
+bazel test //.../helm-chart:template
+```
+
+For pushing to a Chartmuseum helm repository, add this to your BUILD file, in the same directory:
+
+```python
+load("@com_github_airyhq_bazel_tools//helm:helm.bzl", "helm_push_")
+helm_push_(
+    name = "push_testing",
+    repository_url = "https://testing.helm.airy.co",
+    repository_name = "airy",
+    auth = "none",
+    chart = chart,
+)
+helm_push_(
+    name = "push",
+    repository_url = "https://helm.airy.co",
+    repository_name = "airy",
+    auth = "basic",
+    chart = chart,
+)
+```
+
+Then run:
+
+```shell
+bazel run //.../helm-chart:push
+```
+
+Note that only `basic` auth is supported at the moment. If you are using it, you must export `HELM_REPO_USERNAME` and `HELM_REPO_PASSWORD` with the username and the password of your Chartmuseum helm repository.
+
 ## Aspects
 
 We provide a simple [aspect](https://docs.bazel.build/versions/main/skylark/aspects.html) that helps discover the output groups of a target. 
