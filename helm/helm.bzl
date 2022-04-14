@@ -107,7 +107,7 @@ helm_push_ = rule(
         ),
         "_push_script_template": attr.label(
             allow_single_file = True,
-            default = "//tools/build/helm:push.sh",
+            default = "//helm:push.sh",
             doc = "A bash script for pushing the Helm packages to a repo."
         ),
     },
