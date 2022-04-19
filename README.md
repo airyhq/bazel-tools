@@ -361,18 +361,24 @@ Then run:
 bazel test //.../helm-chart:template
 ```
 
+**Parameters:**
+
+- `name`    Unique name of the test rule.
+- `_helm_binary`    Location of the Helm binary to be used (Defaults to the binary downloaded with the repository rule).
+- `chart`   A tgz archive containing the Helm chart.
+
 For pushing to a Chartmuseum helm repository, add this to your BUILD file, in the same directory:
 
 ```python
-load("@com_github_airyhq_bazel_tools//helm:helm.bzl", "helm_push_")
-helm_push_(
+load("@com_github_airyhq_bazel_tools//helm:helm.bzl", "helm_push")
+helm_push(
     name = "push_testing",
     repository_url = "https://testing.helm.airy.co",
     repository_name = "airy",
     auth = "none",
     chart = chart,
 )
-helm_push_(
+helm_push(
     name = "push",
     repository_url = "https://helm.airy.co",
     repository_name = "airy",
@@ -386,6 +392,18 @@ Then run:
 ```shell
 bazel run //.../helm-chart:push
 ```
+
+**Parameters:**
+
+- `name`    Unique name of the test rule.
+- `_helm_binary`    Location of the Helm binary to be used (Defaults to the binary downloaded with the repository rule).
+- `chart`   A tgz archive containing the Helm chart.
+- `repository_url`  The URL of the repository where the Helm chart is pushed.
+- `repository_name` The name of the temporary repoository added by Bazel.
+- `auth`    Authentication type for the Helm repository (currently only `none` and `basic` are supported).
+- `_push_script_template`   A script that is used and templated for running `helm push`.
+- `version` A string containing the version of the Helm chart.
+- `version_file`    An alternative to providing the version, a file can be used containing the version as a first line.
 
 Note that only `basic` auth is supported at the moment. If you are using it, you must export `HELM_REPO_USERNAME` and `HELM_REPO_PASSWORD` with the username and the password of your Chartmuseum helm repository.
 
