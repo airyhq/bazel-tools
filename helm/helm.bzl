@@ -93,9 +93,8 @@ helm_push = rule(
             default = "none",
             doc = "The type of auth for the Helm repository (currently none and basic)."
         ),
-        "_version_file": attr.label(
+        "version_file": attr.label(
             allow_single_file = True,
-            default = Label("//:VERSION"),
             doc = "An alternative file containing the version.",
         ),
         "_helm_binary": attr.label(
