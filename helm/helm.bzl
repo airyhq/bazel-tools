@@ -60,14 +60,14 @@ def _helm_push_impl(ctx):
                 "{repository_name}": repository_name,
                 "{auth}": auth,
                 "{version}": version,
-                "{version_file}": ctx.file._version_file.path,
+                "{version_file}": ctx.file.version_file.path,
             },
             is_executable = True,
         )
     else:
         fail("Authentication for the Helm repository not supported.")
 
-    runfiles = ctx.runfiles(files = [ctx.file.chart, ctx.executable._helm_binary, ctx.file._version_file])
+    runfiles = ctx.runfiles(files = [ctx.file.chart, ctx.executable._helm_binary, ctx.file.version_file])
     return [DefaultInfo(runfiles = runfiles)]
 
 helm_push = rule(
