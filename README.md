@@ -370,15 +370,15 @@ bazel test //.../helm-chart:template
 For pushing to a Chartmuseum helm repository, add this to your BUILD file, in the same directory:
 
 ```python
-load("@com_github_airyhq_bazel_tools//helm:helm.bzl", "helm_push_")
-helm_push_(
+load("@com_github_airyhq_bazel_tools//helm:helm.bzl", "helm_push")
+helm_push(
     name = "push_testing",
     repository_url = "https://testing.helm.airy.co",
     repository_name = "airy",
     auth = "none",
     chart = chart,
 )
-helm_push_(
+helm_push(
     name = "push",
     repository_url = "https://helm.airy.co",
     repository_name = "airy",

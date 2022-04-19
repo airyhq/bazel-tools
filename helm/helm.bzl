@@ -70,7 +70,7 @@ def _helm_push_impl(ctx):
     runfiles = ctx.runfiles(files = [ctx.file.chart, ctx.executable._helm_binary, ctx.file._version_file])
     return [DefaultInfo(runfiles = runfiles)]
 
-helm_push_ = rule(
+helm_push = rule(
     implementation = _helm_push_impl,
     executable = True,
     attrs = {
@@ -107,7 +107,7 @@ helm_push_ = rule(
         ),
         "_push_script_template": attr.label(
             allow_single_file = True,
-            default = "//helm:push.sh",
+            default = "@com_github_airyhq_bazel_tools//helm:push.sh",
             doc = "A bash script for pushing the Helm packages to a repo."
         ),
     },
