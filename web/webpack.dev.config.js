@@ -37,6 +37,8 @@ module.exports = (env, argv) => {
         target: 'web',
         bail: false,
 
+        entry: path.resolve(__dirname, './src/index.tsx'),
+
         output,
 
         optimization: {
