@@ -5,7 +5,7 @@ const webpack = cwdRequire('webpack');
 const Dotenv = cwdRequire('dotenv-webpack');
 const HtmlWebpackPlugin = cwdRequire("html-webpack-plugin");
 const CopyWebpackPlugin = cwdRequire('copy-webpack-plugin');
-const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
+const ReactRefreshWebpackPlugin = cwdRequire("@pmmmwh/react-refresh-webpack-plugin");
 
 function resolveTsconfigPathsToAlias({tsconfigPath, basePath}) {
     const {paths} = require(tsconfigPath).compilerOptions;
