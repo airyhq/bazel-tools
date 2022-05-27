@@ -5,6 +5,7 @@ const webpack = cwdRequire('webpack');
 const Dotenv = cwdRequire('dotenv-webpack');
 const HtmlWebpackPlugin = cwdRequire("html-webpack-plugin");
 const CopyWebpackPlugin = cwdRequire('copy-webpack-plugin');
+const ReactRefreshWebpackPlugin = cwdRequire("@pmmmwh/react-refresh-webpack-plugin");
 
 function resolveTsconfigPathsToAlias({tsconfigPath, basePath}) {
     const {paths} = require(tsconfigPath).compilerOptions;
@@ -36,7 +37,7 @@ module.exports = (env, argv) => {
         target: 'web',
         bail: false,
 
-        entry: ['react-hot-loader/patch', path.resolve(argv.entry)],
+        entry: [path.resolve(argv.entry)],
 
         output,
 
@@ -50,7 +51,6 @@ module.exports = (env, argv) => {
                     tsconfigPath: path.resolve(argv.tsconfig),
                     basePath: process.cwd(),
                 }),
-                'react-dom': '@hot-loader/react-dom',
                 ...JSON.parse(argv.aliases || "{}"),
             },
             extensions: ['.tsx', '.ts', '.js'],
@@ -86,6 +86,7 @@ module.exports = (env, argv) => {
                             '@babel/plugin-transform-spread',
                             '@babel/plugin-proposal-object-rest-spread',
                             '@babel/plugin-proposal-class-properties',
+                            'react-refresh/babel',
                         ],
                     },
                 },
@@ -164,7 +165,8 @@ module.exports = (env, argv) => {
                 inject: true,
                 filename: 'index.html',
             }),
-            new Dotenv()
+            new Dotenv(),
+            new ReactRefreshWebpackPlugin(),
         ],
     };
 };
