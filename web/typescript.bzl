@@ -30,7 +30,7 @@ tsconfig -  (optional) It's possible to extend tsconfigs! Give it a try, if
 
 ASSETS_SUFFIX = "_assets"
 
-def ts_web_library(name, srcs = None, deps = None, data = None, tsconfig = None, **kwargs):
+def ts_web_library(name, srcs = None, deps = None, data = None, tsconfig = None, package_json=None, **kwargs):
     tsconfig = "//:tsconfig.json" if not tsconfig else tsconfig
     deps = [] if not deps else deps
     srcs = native.glob(["**/*.json", "**/*.ts", "**/*.tsx"]) if not srcs else srcs
@@ -50,16 +50,18 @@ def ts_web_library(name, srcs = None, deps = None, data = None, tsconfig = None,
     )
 
     # Create placeholder package.json to import by module name
-    write_file(
-        name = name + "_package.json",
-        out = "package.json",
-        content = ['{"name": "' + name + '","version":"0.0.0"}'],
-    )
+    if not package_json:
+        write_file(
+            name = name + "_package.json",
+            out = "package.json",
+            content = ['{"name": "' + name + '","version":"0.0.0"}'],
+        )
+        package_json = name + "_package.json"
 
     js_library(
         name = name,
         package_name = name,
-        srcs = [name + "_package.json"],
+        srcs = [package_json],
         deps = [name + "_ts_project"],
     )
 
