@@ -21,12 +21,12 @@ def airy_bazel_tools_dependencies():
     )
 
     _maybe_add(
-        http_archive,
+        git_repository,
         # Don't fix this dependency as the content on the provided URL changes
         name = "com_github_bazelbuild_buildtools",
-        strip_prefix = "buildtools-master",
-        sha256 = "41eaf27aae37929b1a29d1d63bec211ae5e47a9c701c85ca8be0fc74ad5151ac",
-        url = "https://github.com/bazelbuild/buildtools/archive/master.zip",
+        commit = "a43aed7014c840a4c20c84958f3f15df5da780f5",
+        remote = "https://github.com/bazelbuild/buildtools",
+        shallow_since = "1653999919 +0200",
     )
 
     _maybe_add(
