@@ -363,7 +363,7 @@ bazel test //.../helm-chart:template
 
 **Parameters:**
 
-- `name`    Unique name of the test rule.
+- `name`    Unique name of the rule.
 - `_helm_binary`    Location of the Helm binary to be used (Defaults to the binary downloaded with the repository rule).
 - `chart`   A tgz archive containing the Helm chart.
 
@@ -395,7 +395,7 @@ bazel run //.../helm-chart:push
 
 **Parameters:**
 
-- `name`    Unique name of the test rule.
+- `name`    Unique name of the rule.
 - `_helm_binary`    Location of the Helm binary to be used (Defaults to the binary downloaded with the repository rule).
 - `chart`   A tgz archive containing the Helm chart.
 - `repository_url`  The URL of the repository where the Helm chart is pushed.
@@ -406,6 +406,68 @@ bazel run //.../helm-chart:push
 - `version_file`    An alternative to providing the version, a file can be used containing the version as a first line.
 
 Note that only `basic` auth is supported at the moment. If you are using it, you must export `HELM_REPO_USERNAME` and `HELM_REPO_PASSWORD` with the username and the password of your Chartmuseum helm repository.
+
+## Minikube
+
+Currently the Minikube rule set supports starting (creating) and stopping (destroying) a Minikube Kubernetes cluster.
+
+For downloading the Minikube binary, add this to your WORKSPACE file:
+
+```python
+load("@com_github_airyhq_bazel_tools//minikube:minikube.bzl", "minikube_tool")
+
+minikube_tool(
+    name = "minikube_binary",
+)
+```
+
+For creating a Kubernetes cluster add this to your BUILD file:
+
+```python
+load("@com_github_airyhq_bazel_tools//minikube:minikube.bzl", "minikube_start")
+
+minikube_start(
+    name = "minikube-start",
+)
+```
+
+Then run:
+
+```shell
+bazel run //.../infrastructure:minikube-start
+```
+
+**Parameters:**
+
+- `name`    Unique name of the rule.
+- `_minikube_binary`    (optional) Location of the Minikube binary to be used (Defaults to the binary downloaded with the repository rule).
+- `profile`   (optional) The Minikube profile [default: airy-core].
+- `driver`   (optional) The Minikube driver [default: docker].
+- `cpus`  (optional) The number of CPU cores for the Kubernetes node [default: 4].
+- `memory` (optional) The amount of memory of the Kubernetes node [default: 7168].
+- `ingress_port`    (optional) The NodePort to be opened for the Ingress Controller [default: 80].
+
+For destroying a Kubernetes cluster add this to your BUILD file:
+
+```python
+load("@com_github_airyhq_bazel_tools//minikube:minikube.bzl", "minikube_stop")
+
+minikube_stop(
+    name = "minikube-stop",
+)
+```
+
+Then run:
+
+```shell
+bazel run //.../infrastructure:minikube-stop
+```
+
+**Parameters:**
+
+- `name`    Unique name of the rule.
+- `_minikube_binary`    (optional) Location of the Minikube binary to be used (Defaults to the binary downloaded with the repository rule).
+- `profile`   (optional) The Minikube profile [default: airy-core].
 
 ## Aspects
 
