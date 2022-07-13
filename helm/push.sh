@@ -30,7 +30,7 @@ esac
 gunzip --force -c {package} > ${chart_tar}
 mkdir -p ${chart_dir}
 tar -xf ${chart_tar}  -C ${chart_dir}
-find ${chart_dir} -iname Chart.yaml -exec sed -i "s/0-develop/${chart_version}/g" {} \;
+find ${chart_dir} -iname Chart.yaml -exec sed -i '.original' "s/0-develop/${chart_version}/g" {} \;
 
 {helm_binary} cm-push --version ${chart_version} ${chart_dir} {repository_name} --force
 {helm_binary} repo remove {repository_name}
