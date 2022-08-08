@@ -14,7 +14,7 @@ minikube_tool = repository_rule(
 )
 
 def _minikube_start_impl(ctx):
-    script = "{} -p {} start --driver={} --cpus={} --memory={} --container-runtime=containerd --ports={}:{} --extra-config=apiserver.service-nodeport-range=1-65535".format(ctx.executable._minikube_binary.path, ctx.attr.profile, ctx.attr.driver, ctx.attr.cpus, ctx.attr.memory, ctx.attr.ingress_port, ctx.attr.ingress_port)
+    script = "{} -p {} start --driver={} --cpus={} --memory={} --container-runtime=containerd --ports={}:{} --extra-config=apiserver.service-node-port-range=1-65535".format(ctx.executable._minikube_binary.path, ctx.attr.profile, ctx.attr.driver, ctx.attr.cpus, ctx.attr.memory, ctx.attr.ingress_port, ctx.attr.ingress_port)
 
     ctx.actions.write(
         output = ctx.outputs.executable,
